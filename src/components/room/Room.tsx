@@ -6,13 +6,14 @@ interface RoomProps {
   timeOfDay: TimeOfDay;
   onNavigate: (tab: 'planner' | 'boss' | 'finance') => void;
   onStartFocus: () => void;
+  dayProgress: number;
 }
 
-export const Room: React.FC<RoomProps> = ({ timeOfDay, onNavigate, onStartFocus }) => {
+export const Room: React.FC<RoomProps> = ({ timeOfDay, onNavigate, onStartFocus, dayProgress }) => {
   return (
     <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
       {/* Cenário Central do Quarto */}
-      <RoomVisual timeOfDay={timeOfDay} onNavigate={onNavigate} />
+      <RoomVisual timeOfDay={timeOfDay} onNavigate={onNavigate} dayProgress={dayProgress} />
 
       {/* Cartão de Contexto Operacional da Tarde */}
       <div className="card-pixel" style={{ padding: '14px' }}>
@@ -37,6 +38,11 @@ export const Room: React.FC<RoomProps> = ({ timeOfDay, onNavigate, onStartFocus 
             <span style={{ fontWeight: 600 }}>17:30 - Árvores Binárias</span>
             <span style={{ fontSize: '0.7rem', color: 'var(--amber-warm)' }}>(Boss em 3 dias)</span>
           </div>
+        </div>
+        <div className="room-progress" aria-label={`Progresso dos blocos: ${dayProgress}%`}>
+          <div className="room-progress__label"><span>Ritmo do dia</span><strong>{dayProgress}%</strong></div>
+          <div className="room-progress__track"><span style={{ width: `${dayProgress}%` }} /></div>
+          <small>{dayProgress >= 70 ? 'O quarto sente que você encontrou seu ritmo.' : 'Cada bloco é uma escolha, não uma cobrança.'}</small>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
@@ -70,4 +76,3 @@ export const Room: React.FC<RoomProps> = ({ timeOfDay, onNavigate, onStartFocus 
     </div>
   );
 };
-

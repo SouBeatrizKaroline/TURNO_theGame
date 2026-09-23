@@ -4,9 +4,10 @@ import { TimeOfDay } from '../../types';
 interface RoomVisualProps {
   timeOfDay: TimeOfDay;
   onNavigate: (tab: 'planner' | 'boss' | 'finance') => void;
+  dayProgress: number;
 }
 
-export const RoomVisual: React.FC<RoomVisualProps> = ({ timeOfDay, onNavigate }) => {
+export const RoomVisual: React.FC<RoomVisualProps> = ({ timeOfDay, onNavigate, dayProgress }) => {
   // Paletas de iluminação da janela baseadas no período
   const skyColors = {
     morning: { sky: '#8EC5FC', sun: '#FDE047', tint: 'rgba(235, 160, 89, 0.08)' },
@@ -76,7 +77,7 @@ export const RoomVisual: React.FC<RoomVisualProps> = ({ timeOfDay, onNavigate })
         <rect x="39" y="24" width="8" height="11" fill="#F3C969" />
         {/* Vaso de Suculenta */}
         <rect x="68" y="25" width="12" height="10" fill="#8C5338" />
-        <rect x="70" y="18" width="8" height="7" fill="#7FB685" />
+          <rect x="70" y="18" width="8" height={dayProgress >= 60 ? "7" : "4"} fill="#7FB685" />
 
         {/* CALENDÁRIO NA PAREDE (Interativo -> Blocos) */}
         <g 
@@ -197,4 +198,3 @@ export const RoomVisual: React.FC<RoomVisualProps> = ({ timeOfDay, onNavigate })
     </div>
   );
 };
-

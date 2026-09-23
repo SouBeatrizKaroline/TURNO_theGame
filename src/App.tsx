@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TimeOfDay, ActiveTab, Task, BossTopic, FinancePot, TopicFamiliarity } from './types';
 import { ResourceHUD } from './components/ResourceHUD';
 import { Room } from './components/room/Room';
@@ -44,14 +44,44 @@ export const App: React.FC = () => {
     { id: 'flexible', label: 'Lazer / Flexível', spent: 35, limit: 70, color: 'var(--amber-warm)' },
     { id: 'reserve', label: 'Reserva de Emergência', spent: 50, limit: 50, color: 'var(--sage-calm)' }
   ]);
+  const [toast, setToast] = useState('');
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('turno-state-v1');
+    if (!saved) return;
+    try {
+      const state = JSON.parse(saved) as Partial<{ timeOfDay: TimeOfDay; ap: number; tasks: Task[]; topics: BossTopic[]; pots: FinancePot[] }>;
+      if (state.timeOfDay) setTimeOfDay(state.timeOfDay);
+      if (typeof state.ap === 'number') setAp(state.ap);
+      if (state.tasks) setTasks(state.tasks);
+      if (state.topics) setTopics(state.topics);
+      if (state.pots) setPots(state.pots);
+    } catch {
+      localStorage.removeItem('turno-state-v1');
+    }
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    localStorage.setItem('turno-state-v1', JSON.stringify({ timeOfDay, ap, tasks, topics, pots }));
+  }, [hydrated, timeOfDay, ap, tasks, topics, pots]);
+
+  const announce = (message: string) => {
+    setToast(message);
+    window.setTimeout(() => setToast(''), 2600);
+  };
 
   // Ações de Tarefas
   const handleCompleteTask = (id: string) => {
     setTasks(prev => prev.map(t => t.id === id ? { ...t, status: 'completed' } : t));
+    announce('Bloco concluído. Uma escolha a menos para carregar.');
   };
 
   const handlePostponeTask = (id: string) => {
     setTasks(prev => prev.map(t => t.id === id ? { ...t, status: 'postponed' } : t));
+    announce('Bloco reorganizado para outro momento.');
   };
 
   const handleRemoveTask = (id: string) => {
@@ -69,11 +99,13 @@ export const App: React.FC = () => {
     // Conclui também a tarefa de estudo caso exista na lista
     setTasks(prev => prev.map(t => t.title.includes(focusTopic) ? { ...t, status: 'completed' } : t));
     setActiveTab('boss');
+    announce('Check-in salvo. Sua familiaridade foi atualizada.');
   };
 
   // Ações Financeiras
   const handleAddExpense = (potId: 'essential' | 'flexible' | 'reserve', amount: number) => {
     setPots(prev => prev.map(p => p.id === potId ? { ...p, spent: p.spent + amount } : p));
+    announce('Gasto registrado no pote escolhido.');
   };
 
   // Protocolo de Resgate "Tudo Mudou"
@@ -86,9 +118,12 @@ export const App: React.FC = () => {
     }));
     setAp(prev => Math.min(prev + 15, maxAp));
     setIsRescueOpen(false);
+    announce('Dia reorganizado. O que é fixo continua protegido.');
   };
 
   const flexibleBudgetRemaining = (pots.find(p => p.id === 'flexible')?.limit || 0) - (pots.find(p => p.id === 'flexible')?.spent || 0);
+  const completedTasks = tasks.filter(task => task.status === 'completed').length;
+  const dayProgress = tasks.length ? Math.round((completedTasks / tasks.length) * 100) : 0;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
@@ -109,6 +144,7 @@ export const App: React.FC = () => {
             timeOfDay={timeOfDay}
             onNavigate={tab => setActiveTab(tab)}
             onStartFocus={() => handleStartFocus('Árvores Binárias')}
+            dayProgress={dayProgress}
           />
         )}
 
@@ -156,7 +192,9 @@ export const App: React.FC = () => {
         activeTab={activeTab}
         onSelectTab={setActiveTab}
       />
+      <div className={`toast ${toast ? 'toast--visible' : ''}`} role="status" aria-live="polite">
+        {toast}
+      </div>
     </div>
   );
 };
-

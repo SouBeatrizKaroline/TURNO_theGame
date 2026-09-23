@@ -33,23 +33,75 @@ body {
 
 #root {
   width: 100%;
-  max-width: 480px;
+  max-width: 1120px;
   min-height: 100vh;
   background-color: var(--bg-deep);
   display: flex;
   flex-direction: column;
   position: relative;
-  box-shadow: 0 0 32px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 48px rgba(0, 0, 0, 0.6);
+  background:
+    radial-gradient(circle at 20% 0%, rgba(103, 152, 192, 0.1), transparent 30%),
+    var(--bg-deep);
 }
 
 @media (min-width: 800px) {
   #root {
-    max-width: 520px;
-    margin: 16px auto;
-    min-height: calc(100vh - 32px);
+    margin: 0 auto;
+    min-height: 100vh;
     border: 2px solid var(--surface-light);
-    border-radius: 8px;
+    border-radius: 0;
   }
+}
+
+main {
+  width: min(100%, 760px);
+  margin: 0 auto;
+}
+
+button, input {
+  min-height: 42px;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 82px;
+  z-index: 30;
+  max-width: min(92vw, 420px);
+  padding: 11px 16px;
+  border: 2px solid var(--gold-coin);
+  border-radius: 999px;
+  background: #181522;
+  color: var(--text-main);
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+  text-align: center;
+  font-size: .78rem;
+}
+
+.toast--visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.room-progress { margin: 10px 0 12px; }
+.room-progress__label { display:flex; justify-content:space-between; font-size:.74rem; color:var(--text-muted); }
+.room-progress__label strong { color:var(--amber-warm); }
+.room-progress__track { height:8px; margin:6px 0 5px; background:var(--bg-deep); border:1px solid var(--surface-light); border-radius:99px; overflow:hidden; }
+.room-progress__track span { display:block; height:100%; background:linear-gradient(90deg, var(--slate-focus), var(--sage-calm)); transition:width .35s ease; }
+.room-progress small { color:var(--text-muted); font-size:.67rem; }
+
+@media (min-width: 760px) {
+  main { padding-inline: 20px; }
+}
+
+@media (max-width: 520px) {
+  #root { max-width: 100%; }
+  main { width: 100%; }
 }
 
 /* Botões com sensação tátil de cartucho retro */
