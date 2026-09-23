@@ -130,7 +130,7 @@ export const App: React.FC = () => {
     const starterTasks: Task[] = [
       ...(setup.className ? [{ id: 'context-class', title: setup.className, timeLabel: setup.classTime, period: setup.classTime < '12:00' ? 'morning' as const : 'afternoon' as const, isFixed: true, status: 'pending' as const }] : []),
       ...(setup.hasWork ? [{ id: 'context-work', title: setup.workTitle || 'Trabalho', timeLabel: setup.workTime, period: setup.workTime < '12:00' ? 'morning' as const : 'afternoon' as const, isFixed: true, status: 'pending' as const }] : []),
-      { id: 'context-rest', title: 'Recolhimento para o sono', timeLabel: '23:00', period: 'dawn', isFixed: true, status: 'pending' }
+      { id: 'context-rest', title: 'Higiene do sono: desacelerar', timeLabel: setup.sleepTime, period: 'dawn', isFixed: true, status: 'pending' }
     ];
     setTasks(starterTasks);
     localStorage.setItem('turno-onboarding-v1', 'done');

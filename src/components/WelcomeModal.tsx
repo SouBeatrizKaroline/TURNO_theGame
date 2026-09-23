@@ -8,6 +8,8 @@ export interface StarterSetup {
   hasWork: boolean;
   workTitle: string;
   workTime: string;
+  sleepTime: string;
+  wakeTime: string;
 }
 
 interface WelcomeModalProps {
@@ -17,7 +19,7 @@ interface WelcomeModalProps {
 export const WelcomeModal: React.FC<WelcomeModalProps> = ({ onStart }) => {
   const [dayLabel, setDayLabel] = useState('Minha semana');
   const [budget, setBudget] = useState({ essential: '180', flexible: '70', reserve: '50' });
-  const [setup, setSetup] = useState<StarterSetup>({ course: '', className: '', classTime: '08:00', hasWork: false, workTitle: 'Estágio', workTime: '14:00' });
+  const [setup, setSetup] = useState<StarterSetup>({ course: '', className: '', classTime: '08:00', hasWork: false, workTitle: 'Estágio', workTime: '14:00', sleepTime: '23:00', wakeTime: '07:00' });
 
   const submit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -36,10 +38,10 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({ onStart }) => {
         <h1 id="welcome-title" className="pixel-title">Bem-vinda ao TURNO</h1>
         <p className="welcome-modal__lead">Seu dia não precisa caber em um modelo pronto. Vamos montar uma semana que tenha a ver com você.</p>
         <div className="welcome-guide">
-          <div><b>🏠 Quarto</b><span>Seu ponto de partida e atalhos.</span></div>
-          <div><b>📅 Blocos</b><span>Organize atividades por turno, sem microgerenciar.</span></div>
-          <div><b>⚔️ Desafios</b><span>Cadastre provas, trabalhos ou qualquer objetivo.</span></div>
-          <div><b>💰 Caixa</b><span>Defina seu orçamento e registre o que gastar.</span></div>
+          <div><b>⏱ Tempo</b><span>Veja o que cabe no seu dia.</span></div>
+          <div><b>📚 Organização</b><span>Monte blocos, aulas e prioridades.</span></div>
+          <div><b>💰 Finanças</b><span>Defina o semanal e acompanhe os gastos.</span></div>
+          <div><b>🛌 Sono</b><span>Proteja horários de dormir e acordar.</span></div>
         </div>
         <form onSubmit={submit} className="welcome-form">
           <label>Nome deste turno
@@ -52,6 +54,8 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({ onStart }) => {
           </div>
           <label className="welcome-check"><input type="checkbox" checked={setup.hasWork} onChange={(event) => setSetup({ ...setup, hasWork: event.target.checked })} /> Tenho estágio/trabalho fixo nesta rotina</label>
           {setup.hasWork && <div className="welcome-form__grid"><label>Nome<input value={setup.workTitle} onChange={(event) => setSetup({ ...setup, workTitle: event.target.value })} /></label><label>Horário<input type="time" value={setup.workTime} onChange={(event) => setSetup({ ...setup, workTime: event.target.value })} /></label></div>}
+          <p className="welcome-form__label">Seu ritmo de sono (você poderá ajustar depois)</p>
+          <div className="welcome-form__grid"><label>Hora de dormir<input type="time" value={setup.sleepTime} onChange={(event) => setSetup({ ...setup, sleepTime: event.target.value })} /></label><label>Hora de acordar<input type="time" value={setup.wakeTime} onChange={(event) => setSetup({ ...setup, wakeTime: event.target.value })} /></label></div>
           <p className="welcome-form__label">Quanto você quer separar nesta semana?</p>
           <div className="welcome-form__grid">
             <label>Essenciais<input type="number" min="0" step="1" value={budget.essential} onChange={(event) => setBudget({ ...budget, essential: event.target.value })} /></label>

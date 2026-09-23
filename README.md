@@ -23,7 +23,7 @@ TURNO é um protótipo funcional de jogo de rotina estudantil. Ele ajuda a visua
 
 ## Propósito
 
-Transformar planejamento em uma experiência acolhedora de percepção e escolha. Antes do dia, o TURNO funciona como uma **bússola**, tornando limites e prioridades visíveis. Depois das ações, funciona como um **espelho**, permitindo rever familiaridade, energia e margem financeira sem converter a vida em uma nota de produtividade.
+Transformar a gestão do tempo, a organização, a vida financeira e a higiene do sono em uma experiência acolhedora de percepção e escolha. Antes do dia, o TURNO funciona como uma **bússola**, tornando limites e prioridades visíveis. Depois das ações, funciona como um **espelho**, permitindo rever familiaridade, energia, descanso e margem financeira sem converter a vida em uma nota de produtividade.
 
 ## Problema
 
@@ -47,7 +47,7 @@ A combinação resultou em um ciclo mínimo: **perceber → escolher → agir �
 - **Desafio acadêmico:** o Enigma de Estrutura de Dados reúne tópicos com familiaridade Nebuloso, Razoável ou Firme.
 - **Sessão de foco:** cronômetro de 25 minutos com pausa, conclusão antecipada e check-in qualitativo ao final.
 - **Três potes financeiros:** Essenciais, Flexível e Reserva, com registro rápido de gastos.
-- **Começo de semana:** introdução guiada para definir o nome do turno e o orçamento inicial de cada pote, todos começando com gasto zero.
+- **Começo de semana:** introdução guiada para definir o nome do turno, o orçamento inicial de cada pote e o ritmo de sono, todos começando sem gastos registrados.
 - **Contexto estudantil opcional:** no começo, a pessoa pode informar curso, disciplina/aula e horário; estágio ou trabalho só aparece se ela marcar que possui um.
 - **Desfazer:** concluir, adiar ou remover um bloco mostra uma ação de desfazer para reduzir o custo de toques acidentais.
 - **Nova semana:** a Caixa permite reabrir a configuração e ajustar os limites sem apagar o conceito de registro da semana anterior.
