@@ -1,0 +1,103 @@
+:root {
+  --bg-deep: #1A1823;
+  --surface-card: #262335;
+  --surface-light: #353149;
+  --text-main: #F5F3F7;
+  --text-muted: #9D97B5;
+  --amber-warm: #EBA059;
+  --sage-calm: #7FB685;
+  --slate-focus: #6798C0;
+  --rose-alert: #DC6A6A;
+  --gold-coin: #F3C969;
+  
+  --font-pixel: 'Pixelify Sans', monospace, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  background-color: var(--bg-deep);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 0 32px rgba(0, 0, 0, 0.6);
+}
+
+@media (min-width: 800px) {
+  #root {
+    max-width: 520px;
+    margin: 16px auto;
+    min-height: calc(100vh - 32px);
+    border: 2px solid var(--surface-light);
+    border-radius: 8px;
+  }
+}
+
+/* Botões com sensação tátil de cartucho retro */
+.btn-retro {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  border: 2px solid #121017;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #121017;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-retro:active {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 #121017;
+}
+
+.btn-retro:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--gold-coin);
+  outline-offset: 3px;
+}
+
+.pixel-title {
+  font-family: var(--font-pixel);
+  letter-spacing: 0.5px;
+}
+
+.card-pixel {
+  background-color: var(--surface-card);
+  border: 2px solid var(--surface-light);
+  border-radius: 6px;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
