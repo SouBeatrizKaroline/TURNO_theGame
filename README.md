@@ -122,8 +122,8 @@ A aplicação usa estado local no componente principal. Os módulos recebem dado
 Pré-requisito: Node.js 20 ou superior.
 
 ```bash
-git clone https://github.com/SouBeatrizKaroline/turno.git
-cd turno
+git clone https://github.com/SouBeatrizKaroline/TURNO_theGame.git
+cd TURNO_theGame
 npm install
 npm run dev
 ```
