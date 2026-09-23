@@ -4,9 +4,10 @@ import { FinancePot } from '../../types';
 interface FinancePotsProps {
   pots: FinancePot[];
   onAddExpense: (potId: 'essential' | 'flexible' | 'reserve', amount: number) => void;
+  onRestartWeek: () => void;
 }
 
-export const FinancePots: React.FC<FinancePotsProps> = ({ pots, onAddExpense }) => {
+export const FinancePots: React.FC<FinancePotsProps> = ({ pots, onAddExpense, onRestartWeek }) => {
   const [valueInput, setValueInput] = useState('');
   const [selectedPot, setSelectedPot] = useState<'essential' | 'flexible' | 'reserve'>('flexible');
 
@@ -28,6 +29,7 @@ export const FinancePots: React.FC<FinancePotsProps> = ({ pots, onAddExpense }) 
         <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
           Controle de margem sem conciliação bancária burocrática.
         </p>
+        <button type="button" className="week-reset" onClick={onRestartWeek}>↻ Configurar uma nova semana</button>
       </div>
 
       {/* Os Três Potes */}
@@ -146,4 +148,3 @@ export const FinancePots: React.FC<FinancePotsProps> = ({ pots, onAddExpense }) 
     </div>
   );
 };
-

@@ -8,13 +8,14 @@ interface RoomProps {
   onStartFocus: () => void;
   dayProgress: number;
   dayLabel: string;
+  onOpenRest: () => void;
 }
 
-export const Room: React.FC<RoomProps> = ({ timeOfDay, onNavigate, onStartFocus, dayProgress, dayLabel }) => {
+export const Room: React.FC<RoomProps> = ({ timeOfDay, onNavigate, onStartFocus, dayProgress, dayLabel, onOpenRest }) => {
   return (
     <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
       {/* Cenário Central do Quarto */}
-      <RoomVisual timeOfDay={timeOfDay} onNavigate={onNavigate} dayProgress={dayProgress} />
+      <RoomVisual timeOfDay={timeOfDay} onNavigate={onNavigate} dayProgress={dayProgress} onOpenRest={onOpenRest} />
 
       {/* Cartão de Contexto Operacional da Tarde */}
       <div className="card-pixel" style={{ padding: '14px' }}>

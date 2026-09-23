@@ -109,6 +109,41 @@ button, input {
 .room-hotspots button { min-height:26px; padding:3px 7px; border:1px solid rgba(245,243,247,.18); border-radius:4px; background:rgba(26,24,35,.86); color:var(--text-main); cursor:pointer; font:600 .62rem var(--font-sans); }
 .room-hotspots button:hover, .room-hotspots button:focus-visible { background:var(--surface-light); border-color:var(--gold-coin); }
 .room-hotspots span { color:var(--text-muted); font-weight:500; }
+.topic-adder { margin-top:14px; padding-top:12px; border-top:1px solid var(--surface-light); }
+.topic-adder label { display:block; color:var(--text-muted); font-size:.72rem; margin-bottom:7px; }
+.topic-adder > div { display:flex; gap:7px; }
+.topic-adder input { flex:1; min-width:0; min-height:40px; padding:8px 10px; border:2px solid var(--surface-light); border-radius:5px; background:var(--bg-deep); color:var(--text-main); font:inherit; }
+.topic-adder button { padding:7px 10px; background:var(--surface-light); color:var(--text-main); white-space:nowrap; }
+.rest-modal { position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:16px; background:rgba(10,8,16,.82); }
+.rest-modal__card { width:min(100%, 460px); padding:18px; background:#241f33; }
+.rest-modal__heading { display:flex; justify-content:space-between; gap:12px; }
+.rest-modal__heading span { color:var(--sage-calm); font-size:.68rem; font-weight:700; }
+.rest-modal__heading h2 { margin-top:4px; color:var(--amber-warm); font-size:1.25rem; }
+.rest-modal__heading > button { align-self:flex-start; border:0; background:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer; }
+.rest-modal__card > p { margin:14px 0; color:var(--text-muted); font-size:.78rem; line-height:1.5; }
+.rest-options { display:grid; gap:8px; }
+.rest-options button { justify-content:space-between; padding:11px 12px; background:var(--surface-light); color:var(--text-main); }
+.rest-options button:first-child { background:var(--amber-warm); color:#1A1823; }
+.rest-options small { opacity:.75; }
+.welcome-modal { position:fixed; inset:0; z-index:120; display:grid; place-items:center; padding:16px; background:rgba(10,8,16,.9); overflow:auto; }
+.welcome-modal__card { width:min(100%, 560px); padding:22px; background:linear-gradient(145deg, #2b2540, #1e1a2b); }
+.welcome-modal__eyebrow { color:var(--amber-warm); font-size:.68rem; font-weight:800; letter-spacing:.12em; }
+.welcome-modal h1 { margin-top:5px; color:var(--text-main); font-size:1.65rem; }
+.welcome-modal__lead { margin:10px 0 16px; color:var(--text-muted); font-size:.82rem; line-height:1.5; }
+.welcome-guide { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:18px; }
+.welcome-guide div { padding:10px; border:1px solid var(--surface-light); border-radius:6px; background:rgba(26,24,35,.6); }
+.welcome-guide b, .welcome-guide span { display:block; }
+.welcome-guide b { color:var(--gold-coin); font-size:.78rem; }
+.welcome-guide span { margin-top:4px; color:var(--text-muted); font-size:.68rem; line-height:1.35; }
+.welcome-form { display:flex; flex-direction:column; gap:10px; }
+.welcome-form label, .welcome-form__label { color:var(--text-muted); font-size:.7rem; font-weight:700; }
+.welcome-form input { display:block; width:100%; min-height:40px; margin-top:5px; padding:8px 10px; border:2px solid var(--surface-light); border-radius:5px; background:var(--bg-deep); color:var(--text-main); font:inherit; }
+.welcome-form__label { margin-top:3px; }
+.welcome-form__grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; }
+.welcome-form small { color:var(--text-muted); font-size:.68rem; line-height:1.4; }
+.welcome-form__submit { margin-top:5px; padding:11px; background:var(--amber-warm); color:#1A1823; }
+.week-reset { margin-top:9px; padding:0; border:0; background:none; color:var(--slate-focus); font:600 .7rem var(--font-sans); text-decoration:underline; cursor:pointer; }
+@media (max-width:520px) { .welcome-guide { grid-template-columns:1fr; } .welcome-form__grid { grid-template-columns:1fr; } }
 
 @media (min-width: 760px) {
   main { padding-inline: 20px; }

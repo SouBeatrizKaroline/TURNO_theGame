@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BossTopic } from '../../types';
 
 interface BossArenaProps {
   topics: BossTopic[];
   onStartFocus: (topicTitle: string) => void;
+  onAddTopic: (title: string) => void;
 }
 
-export const BossArena: React.FC<BossArenaProps> = ({ topics, onStartFocus }) => {
+export const BossArena: React.FC<BossArenaProps> = ({ topics, onStartFocus, onAddTopic }) => {
+  const [newTopic, setNewTopic] = useState('');
   // Cálculo derivado da familiaridade
   const pointsMap = { nebuloso: 1, razoavel: 2, firme: 3 };
   const totalPoints = topics.reduce((acc, t) => acc + pointsMap[t.familiarity], 0);
@@ -145,8 +147,19 @@ export const BossArena: React.FC<BossArenaProps> = ({ topics, onStartFocus }) =>
             );
           })}
         </div>
+        <form className="topic-adder" onSubmit={(event) => {
+          event.preventDefault();
+          if (!newTopic.trim()) return;
+          onAddTopic(newTopic.trim());
+          setNewTopic('');
+        }}>
+          <label htmlFor="new-topic">Adicionar um desafio ou tema da sua realidade</label>
+          <div>
+            <input id="new-topic" value={newTopic} onChange={(event) => setNewTopic(event.target.value)} placeholder="Ex.: prova, TCC, entrevista..." />
+            <button type="submit" className="btn-retro">＋ Cadastrar</button>
+          </div>
+        </form>
       </div>
     </div>
   );
 };
-

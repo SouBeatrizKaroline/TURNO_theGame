@@ -5,9 +5,10 @@ interface RoomVisualProps {
   timeOfDay: TimeOfDay;
   onNavigate: (tab: 'planner' | 'boss' | 'finance') => void;
   dayProgress: number;
+  onOpenRest: () => void;
 }
 
-export const RoomVisual: React.FC<RoomVisualProps> = ({ timeOfDay, onNavigate, dayProgress }) => {
+export const RoomVisual: React.FC<RoomVisualProps> = ({ timeOfDay, onNavigate, dayProgress, onOpenRest }) => {
   const activate = (action: () => void) => (event: React.KeyboardEvent<SVGGElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
@@ -107,11 +108,11 @@ export const RoomVisual: React.FC<RoomVisualProps> = ({ timeOfDay, onNavigate, d
 
         {/* CAMA (Sono e Recuperação) */}
         <g
-          onClick={() => onNavigate('planner')}
-          onKeyDown={activate(() => onNavigate('planner'))}
+          onClick={onOpenRest}
+          onKeyDown={activate(onOpenRest)}
           tabIndex={0}
           role="button"
-          aria-label="Cama: abrir blocos de descanso"
+          aria-label="Cama: abrir recuperação e descanso"
           style={{ cursor: 'pointer' }}
         >
           <rect x="15" y="150" width="85" height="45" fill="#4B3B2B" />
@@ -190,7 +191,7 @@ export const RoomVisual: React.FC<RoomVisualProps> = ({ timeOfDay, onNavigate, d
 
       {/* Rótulos discretos de orientação espacial */}
       <div className="room-hotspots" aria-label="Atalhos do quarto">
-        <button type="button" onClick={() => onNavigate('planner')} aria-label="Abrir blocos e descanso">🛌 Cama <span>Descanso</span></button>
+        <button type="button" onClick={onOpenRest} aria-label="Abrir recuperação e descanso">🛌 Cama <span>Descanso</span></button>
         <button type="button" onClick={() => onNavigate('planner')} aria-label="Abrir rotina e blocos">📅 Parede <span>Rotina</span></button>
         <button type="button" onClick={() => onNavigate('boss')} aria-label="Abrir desafios">📖 Mesa <span>Desafios</span></button>
       </div>

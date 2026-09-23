@@ -8,12 +8,16 @@ import { FocusSession } from './components/focus/FocusSession';
 import { FinancePots } from './components/finance/FinancePots';
 import { RescueModal } from './components/RescueModal';
 import { BottomNavigation } from './components/BottomNavigation';
+import { RestModal } from './components/RestModal';
+import { WelcomeModal } from './components/WelcomeModal';
 
 export const App: React.FC = () => {
   // Estado Temporal e Navegação
   const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>('afternoon');
   const [activeTab, setActiveTab] = useState<ActiveTab>('room');
   const [isRescueOpen, setIsRescueOpen] = useState(false);
+  const [isRestOpen, setIsRestOpen] = useState(false);
+  const [isWelcomeOpen, setIsWelcomeOpen] = useState(() => !localStorage.getItem('turno-onboarding-v1'));
   const [focusTopic, setFocusTopic] = useState<string>('Árvores Binárias');
   const [dayLabel, setDayLabel] = useState('Meu dia');
 
@@ -41,9 +45,9 @@ export const App: React.FC = () => {
 
   // Estado dos 3 Potes Financeiros
   const [pots, setPots] = useState<FinancePot[]>([
-    { id: 'essential', label: 'Essenciais', spent: 120, limit: 180, color: 'var(--slate-focus)' },
-    { id: 'flexible', label: 'Lazer / Flexível', spent: 35, limit: 70, color: 'var(--amber-warm)' },
-    { id: 'reserve', label: 'Reserva de Emergência', spent: 50, limit: 50, color: 'var(--sage-calm)' }
+    { id: 'essential', label: 'Essenciais', spent: 0, limit: 180, color: 'var(--slate-focus)' },
+    { id: 'flexible', label: 'Lazer / Flexível', spent: 0, limit: 70, color: 'var(--amber-warm)' },
+    { id: 'reserve', label: 'Reserva de Emergência', spent: 0, limit: 50, color: 'var(--sage-calm)' }
   ]);
   const [toast, setToast] = useState('');
   const [hydrated, setHydrated] = useState(false);
@@ -101,6 +105,25 @@ export const App: React.FC = () => {
     setActiveTab('focus');
   };
 
+  const handleAddTopic = (title: string) => {
+    setTopics(prev => [...prev, { id: 'topic-' + Date.now(), title, familiarity: 'nebuloso' }]);
+    announce('Novo desafio cadastrado como nebuloso. Você pode começar pelo foco.');
+  };
+
+  const handleRecover = (amount: number, message: string) => {
+    setAp(prev => Math.min(prev + amount, maxAp));
+    setIsRestOpen(false);
+    announce(message);
+  };
+
+  const handleStartWeek = (newPots: FinancePot[], newDayLabel: string) => {
+    setPots(newPots);
+    setDayLabel(newDayLabel);
+    localStorage.setItem('turno-onboarding-v1', 'done');
+    setIsWelcomeOpen(false);
+    announce('Seu turno começou. Você pode adaptar tudo ao longo da semana.');
+  };
+
   const handleFinishFocus = (result: TopicFamiliarity) => {
     setTopics(prev => prev.map(t => t.title === focusTopic ? { ...t, familiarity: result } : t));
     // Conclui também a tarefa de estudo caso exista na lista
@@ -153,6 +176,7 @@ export const App: React.FC = () => {
             onStartFocus={() => handleStartFocus('Árvores Binárias')}
             dayProgress={dayProgress}
             dayLabel={dayLabel}
+            onOpenRest={() => setIsRestOpen(true)}
           />
         )}
 
@@ -170,6 +194,7 @@ export const App: React.FC = () => {
           <BossArena
             topics={topics}
             onStartFocus={handleStartFocus}
+            onAddTopic={handleAddTopic}
           />
         )}
 
@@ -185,6 +210,7 @@ export const App: React.FC = () => {
           <FinancePots
             pots={pots}
             onAddExpense={handleAddExpense}
+            onRestartWeek={() => setIsWelcomeOpen(true)}
           />
         )}
       </main>
@@ -195,6 +221,8 @@ export const App: React.FC = () => {
         onClose={() => setIsRescueOpen(false)}
         onApplyRescue={handleApplyRescue}
       />
+      <RestModal isOpen={isRestOpen} onClose={() => setIsRestOpen(false)} onRecover={handleRecover} />
+      {isWelcomeOpen && <WelcomeModal onStart={handleStartWeek} />}
 
       {/* Barra de Navegação Inferior Acessível */}
       <BottomNavigation
