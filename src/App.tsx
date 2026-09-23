@@ -15,6 +15,7 @@ export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ActiveTab>('room');
   const [isRescueOpen, setIsRescueOpen] = useState(false);
   const [focusTopic, setFocusTopic] = useState<string>('Árvores Binárias');
+  const [dayLabel, setDayLabel] = useState('Meu dia');
 
   // Recursos Vitais
   const [ap, setAp] = useState(65);
@@ -51,12 +52,13 @@ export const App: React.FC = () => {
     const saved = localStorage.getItem('turno-state-v1');
     if (!saved) return;
     try {
-      const state = JSON.parse(saved) as Partial<{ timeOfDay: TimeOfDay; ap: number; tasks: Task[]; topics: BossTopic[]; pots: FinancePot[] }>;
+      const state = JSON.parse(saved) as Partial<{ timeOfDay: TimeOfDay; ap: number; tasks: Task[]; topics: BossTopic[]; pots: FinancePot[]; dayLabel: string }>;
       if (state.timeOfDay) setTimeOfDay(state.timeOfDay);
       if (typeof state.ap === 'number') setAp(state.ap);
       if (state.tasks) setTasks(state.tasks);
       if (state.topics) setTopics(state.topics);
       if (state.pots) setPots(state.pots);
+      if (state.dayLabel) setDayLabel(state.dayLabel);
     } catch {
       localStorage.removeItem('turno-state-v1');
     }
@@ -65,8 +67,8 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     if (!hydrated) return;
-    localStorage.setItem('turno-state-v1', JSON.stringify({ timeOfDay, ap, tasks, topics, pots }));
-  }, [hydrated, timeOfDay, ap, tasks, topics, pots]);
+    localStorage.setItem('turno-state-v1', JSON.stringify({ timeOfDay, ap, tasks, topics, pots, dayLabel }));
+  }, [hydrated, timeOfDay, ap, tasks, topics, pots, dayLabel]);
 
   const announce = (message: string) => {
     setToast(message);
@@ -86,6 +88,11 @@ export const App: React.FC = () => {
 
   const handleRemoveTask = (id: string) => {
     setTasks(prev => prev.filter(t => t.id !== id));
+  };
+
+  const handleAddTask = (task: Omit<Task, 'id' | 'status'>) => {
+    setTasks(prev => [...prev, { ...task, id: 'custom-' + Date.now(), status: 'pending' }]);
+    announce('Novo bloco adicionado ao seu turno.');
   };
 
   // Ações de Foco
@@ -145,6 +152,7 @@ export const App: React.FC = () => {
             onNavigate={tab => setActiveTab(tab)}
             onStartFocus={() => handleStartFocus('Árvores Binárias')}
             dayProgress={dayProgress}
+            dayLabel={dayLabel}
           />
         )}
 
@@ -154,6 +162,7 @@ export const App: React.FC = () => {
             onCompleteTask={handleCompleteTask}
             onPostponeTask={handlePostponeTask}
             onRemoveTask={handleRemoveTask}
+            onAddTask={handleAddTask}
           />
         )}
 

@@ -7,9 +7,10 @@ interface RoomProps {
   onNavigate: (tab: 'planner' | 'boss' | 'finance') => void;
   onStartFocus: () => void;
   dayProgress: number;
+  dayLabel: string;
 }
 
-export const Room: React.FC<RoomProps> = ({ timeOfDay, onNavigate, onStartFocus, dayProgress }) => {
+export const Room: React.FC<RoomProps> = ({ timeOfDay, onNavigate, onStartFocus, dayProgress, dayLabel }) => {
   return (
     <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
       {/* Cenário Central do Quarto */}
@@ -22,7 +23,7 @@ export const Room: React.FC<RoomProps> = ({ timeOfDay, onNavigate, onStartFocus,
             {timeOfDay === 'morning' ? 'Turno da Manhã' : timeOfDay === 'afternoon' ? 'Turno da Tarde' : 'Turno da Noite'}
           </span>
           <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-            Quarta-feira
+            {dayLabel}
           </span>
         </div>
 

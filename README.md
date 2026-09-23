@@ -43,6 +43,7 @@ A combinação resultou em um ciclo mínimo: **perceber → escolher → agir �
 
 - **Quarto como hub:** cenário 2D em Cozy Pixel Art, com atalhos interativos e atmosferas de manhã, tarde e noite.
 - **Blocos do Dia:** compromissos organizados por turno, com ações de concluir, adiar e remover; adiamento é tratado como reorganização.
+- **Montar meu dia:** criação de atividades próprias com título, horário, turno e marcação de compromisso fixo.
 - **Desafio acadêmico:** o Enigma de Estrutura de Dados reúne tópicos com familiaridade Nebuloso, Razoável ou Firme.
 - **Sessão de foco:** cronômetro de 25 minutos com pausa, conclusão antecipada e check-in qualitativo ao final.
 - **Três potes financeiros:** Essenciais, Flexível e Reserva, com registro rápido de gastos.
@@ -161,6 +162,7 @@ npm run preview
 - O Quarto muda conforme o período, mas ainda reage pouco às decisões tomadas nos outros módulos.
 - A familiaridade agregada do desafio é uma representação lúdica derivada de autoavaliação, não uma medida científica.
 - A proposta precisa ser validada com estudantes reais, incluindo pessoas neurodivergentes e usuárias de tecnologias assistivas.
+- A personalização atual começa pelos blocos; edição avançada de atividades, tópicos, nome do dia e limites dos potes ainda é uma próxima camada.
 
 ## Próximos passos
 

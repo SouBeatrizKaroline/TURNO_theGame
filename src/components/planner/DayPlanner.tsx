@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Task, DayBlockPeriod } from '../../types';
 
 interface DayPlannerProps {
@@ -6,14 +6,20 @@ interface DayPlannerProps {
   onCompleteTask: (id: string) => void;
   onPostponeTask: (id: string) => void;
   onRemoveTask: (id: string) => void;
+  onAddTask: (task: Omit<Task, 'id' | 'status'>) => void;
 }
 
 export const DayPlanner: React.FC<DayPlannerProps> = ({
   tasks,
   onCompleteTask,
   onPostponeTask,
-  onRemoveTask
+  onRemoveTask,
+  onAddTask
 }) => {
+  const [title, setTitle] = useState('');
+  const [timeLabel, setTimeLabel] = useState('18:00');
+  const [period, setPeriod] = useState<DayBlockPeriod>('afternoon');
+  const [isFixed, setIsFixed] = useState(false);
   const blocks: { period: DayBlockPeriod; label: string; icon: string }[] = [
     { period: 'morning', label: 'Manhã (06h - 12h)', icon: '🌅' },
     { period: 'afternoon', label: 'Tarde (12h - 18h)', icon: '☀️' },
@@ -31,6 +37,34 @@ export const DayPlanner: React.FC<DayPlannerProps> = ({
           Alinhe seus turnos sem microgerenciamento de minutos.
         </p>
       </div>
+
+      <form className="card-pixel add-block" onSubmit={(event) => {
+        event.preventDefault();
+        if (!title.trim()) return;
+        onAddTask({ title: title.trim(), timeLabel, period, isFixed });
+        setTitle('');
+        setIsFixed(false);
+      }}>
+        <div className="add-block__heading">
+          <div><strong>Montar meu dia</strong><span>Crie um bloco que faça sentido para a sua realidade.</span></div>
+          <span aria-hidden="true">＋</span>
+        </div>
+        <label>Atividade
+          <input value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Ex.: estudar, trabalhar, descansar..." />
+        </label>
+        <div className="add-block__row">
+          <label>Horário
+            <input type="time" value={timeLabel} onChange={(event) => setTimeLabel(event.target.value)} />
+          </label>
+          <label>Turno
+            <select value={period} onChange={(event) => setPeriod(event.target.value as DayBlockPeriod)}>
+              <option value="morning">Manhã</option><option value="afternoon">Tarde</option><option value="night">Noite</option><option value="dawn">Descanso</option>
+            </select>
+          </label>
+        </div>
+        <label className="add-block__check"><input type="checkbox" checked={isFixed} onChange={(event) => setIsFixed(event.target.checked)} /> É um compromisso fixo</label>
+        <button className="btn-retro add-block__submit" type="submit">＋ Adicionar ao meu turno</button>
+      </form>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {blocks.map(block => {
@@ -158,4 +192,3 @@ export const DayPlanner: React.FC<DayPlannerProps> = ({
     </div>
   );
 };
-

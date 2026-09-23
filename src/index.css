@@ -95,6 +95,17 @@ button, input {
 .room-progress__track span { display:block; height:100%; background:linear-gradient(90deg, var(--slate-focus), var(--sage-calm)); transition:width .35s ease; }
 .room-progress small { color:var(--text-muted); font-size:.67rem; }
 
+.add-block { padding: 14px; display:flex; flex-direction:column; gap:10px; border-color: rgba(235,160,89,.55); background: linear-gradient(145deg, rgba(235,160,89,.10), var(--surface-card)); }
+.add-block__heading { display:flex; justify-content:space-between; align-items:flex-start; color:var(--amber-warm); font-family:var(--font-pixel); font-size:1rem; }
+.add-block__heading span { display:block; color:var(--text-muted); font-family:var(--font-sans); font-size:.7rem; margin-top:3px; }
+.add-block__heading > span { font-family:var(--font-pixel); font-size:1.5rem; color:var(--gold-coin); }
+.add-block label { display:flex; flex-direction:column; gap:5px; color:var(--text-muted); font-size:.7rem; font-weight:700; }
+.add-block input, .add-block select { width:100%; min-height:40px; padding:8px 10px; border:2px solid var(--surface-light); border-radius:5px; background:var(--bg-deep); color:var(--text-main); font:inherit; font-weight:500; }
+.add-block__row { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.add-block__check { flex-direction:row !important; align-items:center; gap:8px !important; font-weight:500 !important; }
+.add-block__check input { width:18px; min-height:18px; accent-color:var(--amber-warm); }
+.add-block__submit { padding:9px 12px; background:var(--amber-warm); color:#1A1823; border-color:#1A1823; }
+
 @media (min-width: 760px) {
   main { padding-inline: 20px; }
 }
