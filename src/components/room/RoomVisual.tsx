@@ -8,6 +8,12 @@ interface RoomVisualProps {
 }
 
 export const RoomVisual: React.FC<RoomVisualProps> = ({ timeOfDay, onNavigate, dayProgress }) => {
+  const activate = (action: () => void) => (event: React.KeyboardEvent<SVGGElement>) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      action();
+    }
+  };
   // Paletas de iluminação da janela baseadas no período
   const skyColors = {
     morning: { sky: '#8EC5FC', sun: '#FDE047', tint: 'rgba(235, 160, 89, 0.08)' },
@@ -100,7 +106,14 @@ export const RoomVisual: React.FC<RoomVisualProps> = ({ timeOfDay, onNavigate, d
         </g>
 
         {/* CAMA (Sono e Recuperação) */}
-        <g>
+        <g
+          onClick={() => onNavigate('planner')}
+          onKeyDown={activate(() => onNavigate('planner'))}
+          tabIndex={0}
+          role="button"
+          aria-label="Cama: abrir blocos de descanso"
+          style={{ cursor: 'pointer' }}
+        >
           <rect x="15" y="150" width="85" height="45" fill="#4B3B2B" />
           <rect x="15" y="135" width="10" height="25" fill="#3D2E20" />
           {/* Colchão e Lençol */}
@@ -176,14 +189,19 @@ export const RoomVisual: React.FC<RoomVisualProps> = ({ timeOfDay, onNavigate, d
       </svg>
 
       {/* Rótulos discretos de orientação espacial */}
+      <div className="room-hotspots" aria-label="Atalhos do quarto">
+        <button type="button" onClick={() => onNavigate('planner')} aria-label="Abrir blocos e descanso">🛌 Cama <span>Descanso</span></button>
+        <button type="button" onClick={() => onNavigate('planner')} aria-label="Abrir rotina e blocos">📅 Parede <span>Rotina</span></button>
+        <button type="button" onClick={() => onNavigate('boss')} aria-label="Abrir desafios">📖 Mesa <span>Desafios</span></button>
+      </div>
       <div style={{
         position: 'absolute',
         bottom: '8px',
         left: '10px',
         right: '10px',
-        display: 'flex',
         justifyContent: 'space-between',
-        pointerEvents: 'none'
+        pointerEvents: 'none',
+        display: 'none'
       }}>
         <span style={{ fontSize: '0.62rem', background: 'rgba(26,24,35,0.75)', padding: '2px 6px', borderRadius: '3px' }}>
           🛌 Cama: Descanso

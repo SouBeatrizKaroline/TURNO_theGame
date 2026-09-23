@@ -105,6 +105,10 @@ button, input {
 .add-block__check { flex-direction:row !important; align-items:center; gap:8px !important; font-weight:500 !important; }
 .add-block__check input { width:18px; min-height:18px; accent-color:var(--amber-warm); }
 .add-block__submit { padding:9px 12px; background:var(--amber-warm); color:#1A1823; border-color:#1A1823; }
+.room-hotspots { position:absolute; left:10px; right:10px; bottom:7px; z-index:2; display:flex; justify-content:space-between; gap:6px; }
+.room-hotspots button { min-height:26px; padding:3px 7px; border:1px solid rgba(245,243,247,.18); border-radius:4px; background:rgba(26,24,35,.86); color:var(--text-main); cursor:pointer; font:600 .62rem var(--font-sans); }
+.room-hotspots button:hover, .room-hotspots button:focus-visible { background:var(--surface-light); border-color:var(--gold-coin); }
+.room-hotspots span { color:var(--text-muted); font-weight:500; }
 
 @media (min-width: 760px) {
   main { padding-inline: 20px; }
