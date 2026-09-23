@@ -3,7 +3,7 @@ import { TopicFamiliarity } from '../../types';
 
 interface FocusSessionProps {
   topicTitle: string;
-  onFinish: (result: TopicFamiliarity) => void;
+  onFinish: (result: TopicFamiliarity, minutes: number) => void;
   onCancel: () => void;
 }
 
@@ -12,8 +12,10 @@ export const FocusSession: React.FC<FocusSessionProps> = ({
   onFinish,
   onCancel
 }) => {
+  const [durationMinutes, setDurationMinutes] = useState(25);
   const [secondsLeft, setSecondsLeft] = useState(25 * 60);
-  const [isRunning, setIsRunning] = useState(true);
+  const [isRunning, setIsRunning] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
   const [isReflecting, setIsReflecting] = useState(false);
 
   useEffect(() => {
@@ -25,6 +27,21 @@ export const FocusSession: React.FC<FocusSessionProps> = ({
     }
     return () => clearInterval(timer);
   }, [isRunning, secondsLeft, isReflecting]);
+
+  useEffect(() => {
+    if (secondsLeft === 0 && hasStarted) setIsReflecting(true);
+  }, [secondsLeft, hasStarted]);
+
+  const chooseDuration = (minutes: number) => {
+    if (hasStarted) return;
+    setDurationMinutes(minutes);
+    setSecondsLeft(minutes * 60);
+  };
+
+  const startSession = () => {
+    setHasStarted(true);
+    setIsRunning(true);
+  };
 
   const minutes = Math.floor(secondsLeft / 60);
   const seconds = secondsLeft % 60;
@@ -42,7 +59,7 @@ export const FocusSession: React.FC<FocusSessionProps> = ({
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '8px' }}>
           <button
-            onClick={() => onFinish('nebuloso')}
+            onClick={() => onFinish('nebuloso', durationMinutes)}
             className="btn-retro"
             style={{ background: 'var(--surface-light)', color: 'var(--rose-alert)', padding: '12px' }}
           >
@@ -50,7 +67,7 @@ export const FocusSession: React.FC<FocusSessionProps> = ({
           </button>
 
           <button
-            onClick={() => onFinish('razoavel')}
+            onClick={() => onFinish('razoavel', durationMinutes)}
             className="btn-retro"
             style={{ background: 'var(--surface-light)', color: 'var(--amber-warm)', padding: '12px' }}
           >
@@ -58,7 +75,7 @@ export const FocusSession: React.FC<FocusSessionProps> = ({
           </button>
 
           <button
-            onClick={() => onFinish('firme')}
+            onClick={() => onFinish('firme', durationMinutes)}
             className="btn-retro"
             style={{ background: 'var(--sage-calm)', color: '#1A1823', padding: '12px' }}
           >
@@ -82,15 +99,19 @@ export const FocusSession: React.FC<FocusSessionProps> = ({
     }}>
       <div>
         <span style={{ fontSize: '0.72rem', color: 'var(--slate-focus)', fontWeight: 700, textTransform: 'uppercase' }}>
-          ESTRUTURA DE DADOS
+          FOCO PERSONALIZADO
         </span>
         <h2 className="pixel-title" style={{ fontSize: '1.4rem', marginTop: '4px' }}>
           {topicTitle}
         </h2>
         <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-          Modo: Exercícios e Resolução Prática
+          Escolha um tempo que caiba no seu turno. Você pode pausar sem perder o registro.
         </p>
       </div>
+
+      {!hasStarted && <div className="focus-duration-picker" aria-label="Duração do foco">
+        {[15, 25, 45].map(minutes => <button key={minutes} className={`btn-retro ${durationMinutes === minutes ? 'is-selected' : ''}`} onClick={() => chooseDuration(minutes)}>{minutes} min</button>)}
+      </div>}
 
       {/* Relógio Austero sem Distrações */}
       <div style={{
@@ -109,7 +130,7 @@ export const FocusSession: React.FC<FocusSessionProps> = ({
         Sua mente está no mundo real. Esta tela apenas preserva seu espaço de tempo.
       </p>
 
-      <div style={{ display: 'flex', gap: '10px', width: '100%', maxWidth: '280px' }}>
+      {!hasStarted ? <button className="btn-retro" onClick={startSession} style={{ background: 'var(--amber-warm)', color: '#1A1823', width: '100%', maxWidth: '280px', padding: '12px' }}>▶ Começar foco de {durationMinutes} min</button> : <div style={{ display: 'flex', gap: '10px', width: '100%', maxWidth: '280px' }}>
         <button
           onClick={() => setIsRunning(!isRunning)}
           className="btn-retro"
@@ -135,7 +156,7 @@ export const FocusSession: React.FC<FocusSessionProps> = ({
         >
           ✓ Concluir
         </button>
-      </div>
+      </div>}
 
       <button
         onClick={onCancel}
@@ -153,4 +174,3 @@ export const FocusSession: React.FC<FocusSessionProps> = ({
     </div>
   );
 };
-

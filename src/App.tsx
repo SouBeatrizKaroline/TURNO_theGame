@@ -20,6 +20,9 @@ export const App: React.FC = () => {
   const [isWelcomeOpen, setIsWelcomeOpen] = useState(() => !localStorage.getItem('turno-onboarding-v1'));
   const [focusTopic, setFocusTopic] = useState<string>('Árvores Binárias');
   const [dayLabel, setDayLabel] = useState('Meu dia');
+  const [sleepPlan, setSleepPlan] = useState({ bedtime: '23:00', wakeTime: '07:00' });
+  const [lastSleep, setLastSleep] = useState<{ bedtime: string; wakeTime: string; quality: string; duration: number }>();
+  const [focusMinutes, setFocusMinutes] = useState(0);
 
   // Recursos Vitais
   const [ap, setAp] = useState(65);
@@ -57,13 +60,16 @@ export const App: React.FC = () => {
     const saved = localStorage.getItem('turno-state-v1');
     if (!saved) return;
     try {
-      const state = JSON.parse(saved) as Partial<{ timeOfDay: TimeOfDay; ap: number; tasks: Task[]; topics: BossTopic[]; pots: FinancePot[]; dayLabel: string }>;
+      const state = JSON.parse(saved) as Partial<{ timeOfDay: TimeOfDay; ap: number; tasks: Task[]; topics: BossTopic[]; pots: FinancePot[]; dayLabel: string; sleepPlan: typeof sleepPlan; lastSleep: typeof lastSleep; focusMinutes: number }>;
       if (state.timeOfDay) setTimeOfDay(state.timeOfDay);
       if (typeof state.ap === 'number') setAp(state.ap);
       if (state.tasks) setTasks(state.tasks);
       if (state.topics) setTopics(state.topics);
       if (state.pots) setPots(state.pots);
       if (state.dayLabel) setDayLabel(state.dayLabel);
+      if (state.sleepPlan) setSleepPlan(state.sleepPlan);
+      if (state.lastSleep) setLastSleep(state.lastSleep);
+      if (typeof state.focusMinutes === 'number') setFocusMinutes(state.focusMinutes);
     } catch {
       localStorage.removeItem('turno-state-v1');
     }
@@ -72,8 +78,8 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     if (!hydrated) return;
-    localStorage.setItem('turno-state-v1', JSON.stringify({ timeOfDay, ap, tasks, topics, pots, dayLabel }));
-  }, [hydrated, timeOfDay, ap, tasks, topics, pots, dayLabel]);
+    localStorage.setItem('turno-state-v1', JSON.stringify({ timeOfDay, ap, tasks, topics, pots, dayLabel, sleepPlan, lastSleep, focusMinutes }));
+  }, [hydrated, timeOfDay, ap, tasks, topics, pots, dayLabel, sleepPlan, lastSleep, focusMinutes]);
 
   const announce = (message: string) => {
     setToast(message);
@@ -127,6 +133,7 @@ export const App: React.FC = () => {
   const handleStartWeek = (newPots: FinancePot[], newDayLabel: string, setup: StarterSetup) => {
     setPots(newPots);
     setDayLabel(newDayLabel);
+    setSleepPlan({ bedtime: setup.sleepTime, wakeTime: setup.wakeTime });
     const starterTasks: Task[] = [
       ...(setup.className ? [{ id: 'context-class', title: setup.className, timeLabel: setup.classTime, period: setup.classTime < '12:00' ? 'morning' as const : 'afternoon' as const, isFixed: true, status: 'pending' as const }] : []),
       ...(setup.hasWork ? [{ id: 'context-work', title: setup.workTitle || 'Trabalho', timeLabel: setup.workTime, period: setup.workTime < '12:00' ? 'morning' as const : 'afternoon' as const, isFixed: true, status: 'pending' as const }] : []),
@@ -138,12 +145,19 @@ export const App: React.FC = () => {
     announce('Seu turno começou. Você pode adaptar tudo ao longo da semana.');
   };
 
-  const handleFinishFocus = (result: TopicFamiliarity) => {
+  const handleFinishFocus = (result: TopicFamiliarity, minutes: number) => {
+    setFocusMinutes(prev => prev + minutes);
     setTopics(prev => prev.map(t => t.title === focusTopic ? { ...t, familiarity: result } : t));
     // Conclui também a tarefa de estudo caso exista na lista
     setTasks(prev => prev.map(t => t.title.includes(focusTopic) ? { ...t, status: 'completed' } : t));
     setActiveTab('boss');
-    announce('Check-in salvo. Sua familiaridade foi atualizada.');
+    announce(`Check-in salvo. ${minutes} min de foco registrados.`);
+  };
+
+  const handleRecordSleep = (record: { bedtime: string; wakeTime: string; quality: string; duration: number }) => {
+    setLastSleep(record);
+    setIsRestOpen(false);
+    announce(`Noite registrada: ${Math.floor(record.duration / 60)}h ${record.duration % 60}min. Sem punição, só contexto.`);
   };
 
   // Ações Financeiras
@@ -235,7 +249,7 @@ export const App: React.FC = () => {
         onClose={() => setIsRescueOpen(false)}
         onApplyRescue={handleApplyRescue}
       />
-      <RestModal isOpen={isRestOpen} onClose={() => setIsRestOpen(false)} onRecover={handleRecover} />
+      <RestModal isOpen={isRestOpen} onClose={() => setIsRestOpen(false)} onRecover={handleRecover} sleepPlan={sleepPlan} lastSleep={lastSleep} onRecordSleep={handleRecordSleep} />
       {isWelcomeOpen && <WelcomeModal onStart={handleStartWeek} />}
 
       {/* Barra de Navegação Inferior Acessível */}

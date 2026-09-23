@@ -207,3 +207,9 @@ input:focus-visible {
     animation-iteration-count: 1 !important;
   }
 }
+ .focus-duration-picker { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+ .focus-duration-picker .is-selected { background:var(--amber-warm); color:#1A1823; }
+ .sleep-checkin { display:flex; flex-direction:column; gap:10px; padding:14px; background:var(--surface-card); border:1px solid var(--surface-light); border-radius:8px; text-align:left; }
+ .sleep-checkin small, .rest-modal__note { color:var(--text-muted); font-size:.72rem; }
+ .sleep-checkin select, .sleep-checkin input { width:100%; margin-top:4px; }
+ .sleep-duration { margin:0; color:var(--amber-warm); font-weight:700; }
