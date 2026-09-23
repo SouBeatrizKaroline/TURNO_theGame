@@ -1,13 +1,23 @@
 import React, { useState } from 'react';
 import { FinancePot } from '../types';
 
+export interface StarterSetup {
+  course: string;
+  className: string;
+  classTime: string;
+  hasWork: boolean;
+  workTitle: string;
+  workTime: string;
+}
+
 interface WelcomeModalProps {
-  onStart: (pots: FinancePot[], dayLabel: string) => void;
+  onStart: (pots: FinancePot[], dayLabel: string, setup: StarterSetup) => void;
 }
 
 export const WelcomeModal: React.FC<WelcomeModalProps> = ({ onStart }) => {
   const [dayLabel, setDayLabel] = useState('Minha semana');
   const [budget, setBudget] = useState({ essential: '180', flexible: '70', reserve: '50' });
+  const [setup, setSetup] = useState<StarterSetup>({ course: '', className: '', classTime: '08:00', hasWork: false, workTitle: 'Estágio', workTime: '14:00' });
 
   const submit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -16,7 +26,7 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({ onStart }) => {
       { id: 'flexible' as const, label: 'Lazer / Flexível', color: 'var(--amber-warm)', value: budget.flexible },
       { id: 'reserve' as const, label: 'Reserva de Emergência', color: 'var(--sage-calm)', value: budget.reserve }
     ];
-    onStart(values.map((pot) => ({ ...pot, limit: Math.max(Number(pot.value) || 0, 0), spent: 0 })), dayLabel.trim() || 'Minha semana');
+    onStart(values.map((pot) => ({ ...pot, limit: Math.max(Number(pot.value) || 0, 0), spent: 0 })), dayLabel.trim() || 'Minha semana', setup);
   };
 
   return (
@@ -35,6 +45,13 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({ onStart }) => {
           <label>Nome deste turno
             <input value={dayLabel} onChange={(event) => setDayLabel(event.target.value)} />
           </label>
+          <div className="welcome-form__grid welcome-form__grid--context">
+            <label>Curso ou área (opcional)<input placeholder="Ex.: ADS, Direito..." value={setup.course} onChange={(event) => setSetup({ ...setup, course: event.target.value })} /></label>
+            <label>Disciplina ou aula<input placeholder="Ex.: Estrutura de Dados" value={setup.className} onChange={(event) => setSetup({ ...setup, className: event.target.value })} /></label>
+            <label>Horário da aula<input type="time" value={setup.classTime} onChange={(event) => setSetup({ ...setup, classTime: event.target.value })} /></label>
+          </div>
+          <label className="welcome-check"><input type="checkbox" checked={setup.hasWork} onChange={(event) => setSetup({ ...setup, hasWork: event.target.checked })} /> Tenho estágio/trabalho fixo nesta rotina</label>
+          {setup.hasWork && <div className="welcome-form__grid"><label>Nome<input value={setup.workTitle} onChange={(event) => setSetup({ ...setup, workTitle: event.target.value })} /></label><label>Horário<input type="time" value={setup.workTime} onChange={(event) => setSetup({ ...setup, workTime: event.target.value })} /></label></div>}
           <p className="welcome-form__label">Quanto você quer separar nesta semana?</p>
           <div className="welcome-form__grid">
             <label>Essenciais<input type="number" min="0" step="1" value={budget.essential} onChange={(event) => setBudget({ ...budget, essential: event.target.value })} /></label>

@@ -48,6 +48,8 @@ A combinação resultou em um ciclo mínimo: **perceber → escolher → agir �
 - **Sessão de foco:** cronômetro de 25 minutos com pausa, conclusão antecipada e check-in qualitativo ao final.
 - **Três potes financeiros:** Essenciais, Flexível e Reserva, com registro rápido de gastos.
 - **Começo de semana:** introdução guiada para definir o nome do turno e o orçamento inicial de cada pote, todos começando com gasto zero.
+- **Contexto estudantil opcional:** no começo, a pessoa pode informar curso, disciplina/aula e horário; estágio ou trabalho só aparece se ela marcar que possui um.
+- **Desfazer:** concluir, adiar ou remover um bloco mostra uma ação de desfazer para reduzir o custo de toques acidentais.
 - **Nova semana:** a Caixa permite reabrir a configuração e ajustar os limites sem apagar o conceito de registro da semana anterior.
 - **Tudo Mudou:** fluxo de resgate que reorganiza tarefas flexíveis e protege energia, sem apagar compromissos fixos.
 - **Estado compartilhado:** uma sessão de foco atualiza o tópico e a tarefa correspondente; um gasto atualiza o pote e o HUD.

@@ -9,7 +9,7 @@ import { FinancePots } from './components/finance/FinancePots';
 import { RescueModal } from './components/RescueModal';
 import { BottomNavigation } from './components/BottomNavigation';
 import { RestModal } from './components/RestModal';
-import { WelcomeModal } from './components/WelcomeModal';
+import { StarterSetup, WelcomeModal } from './components/WelcomeModal';
 
 export const App: React.FC = () => {
   // Estado Temporal e Navegação
@@ -50,6 +50,7 @@ export const App: React.FC = () => {
     { id: 'reserve', label: 'Reserva de Emergência', spent: 0, limit: 50, color: 'var(--sage-calm)' }
   ]);
   const [toast, setToast] = useState('');
+  const [undo, setUndo] = useState<(() => void) | null>(null);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -81,17 +82,24 @@ export const App: React.FC = () => {
 
   // Ações de Tarefas
   const handleCompleteTask = (id: string) => {
+    const previous = tasks;
     setTasks(prev => prev.map(t => t.id === id ? { ...t, status: 'completed' } : t));
-    announce('Bloco concluído. Uma escolha a menos para carregar.');
+    setUndo(() => () => setTasks(previous));
+    announce('Bloco concluído. Se foi sem querer, você pode desfazer.');
   };
 
   const handlePostponeTask = (id: string) => {
+    const previous = tasks;
     setTasks(prev => prev.map(t => t.id === id ? { ...t, status: 'postponed' } : t));
-    announce('Bloco reorganizado para outro momento.');
+    setUndo(() => () => setTasks(previous));
+    announce('Bloco reorganizado. Se foi sem querer, você pode desfazer.');
   };
 
   const handleRemoveTask = (id: string) => {
+    const previous = tasks;
     setTasks(prev => prev.filter(t => t.id !== id));
+    setUndo(() => () => setTasks(previous));
+    announce('Bloco removido. Se foi sem querer, você pode desfazer.');
   };
 
   const handleAddTask = (task: Omit<Task, 'id' | 'status'>) => {
@@ -116,9 +124,15 @@ export const App: React.FC = () => {
     announce(message);
   };
 
-  const handleStartWeek = (newPots: FinancePot[], newDayLabel: string) => {
+  const handleStartWeek = (newPots: FinancePot[], newDayLabel: string, setup: StarterSetup) => {
     setPots(newPots);
     setDayLabel(newDayLabel);
+    const starterTasks: Task[] = [
+      ...(setup.className ? [{ id: 'context-class', title: setup.className, timeLabel: setup.classTime, period: setup.classTime < '12:00' ? 'morning' as const : 'afternoon' as const, isFixed: true, status: 'pending' as const }] : []),
+      ...(setup.hasWork ? [{ id: 'context-work', title: setup.workTitle || 'Trabalho', timeLabel: setup.workTime, period: setup.workTime < '12:00' ? 'morning' as const : 'afternoon' as const, isFixed: true, status: 'pending' as const }] : []),
+      { id: 'context-rest', title: 'Recolhimento para o sono', timeLabel: '23:00', period: 'dawn', isFixed: true, status: 'pending' }
+    ];
+    setTasks(starterTasks);
     localStorage.setItem('turno-onboarding-v1', 'done');
     setIsWelcomeOpen(false);
     announce('Seu turno começou. Você pode adaptar tudo ao longo da semana.');
@@ -231,6 +245,7 @@ export const App: React.FC = () => {
       />
       <div className={`toast ${toast ? 'toast--visible' : ''}`} role="status" aria-live="polite">
         {toast}
+        {undo && toast && <button className="toast__undo" onClick={() => { undo(); setUndo(null); setToast('Ação desfeita.'); }}>Desfazer</button>}
       </div>
     </div>
   );
