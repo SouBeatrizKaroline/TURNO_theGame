@@ -12,6 +12,7 @@ import { RestModal } from './components/RestModal';
 import { StarterSetup, WelcomeModal } from './components/WelcomeModal';
 
 export const App: React.FC = () => {
+  const stateKey = 'turno-state-v2';
   // Estado Temporal e Navegação
   const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>('afternoon');
   const [activeTab, setActiveTab] = useState<ActiveTab>('room');
@@ -58,13 +59,13 @@ export const App: React.FC = () => {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('turno-state-v1');
+    const saved = localStorage.getItem(stateKey) || localStorage.getItem('turno-state-v1');
     if (!saved) return;
     try {
       const state = JSON.parse(saved) as Partial<{ timeOfDay: TimeOfDay; ap: number; tasks: Task[]; topics: BossTopic[]; pots: FinancePot[]; dayLabel: string; sleepPlan: typeof sleepPlan; lastSleep: typeof lastSleep; focusMinutes: number }>;
       if (state.timeOfDay) setTimeOfDay(state.timeOfDay);
       if (typeof state.ap === 'number') setAp(state.ap);
-      if (state.tasks) setTasks(state.tasks);
+      if (state.tasks) setTasks(state.tasks.map(task => task.id === '1' || task.id === '3' || task.id === '7' || task.id.startsWith('context-') ? { ...task, isFixed: false } : task));
       if (state.topics) setTopics(state.topics);
       if (state.pots) setPots(state.pots);
       if (state.dayLabel) setDayLabel(state.dayLabel);
@@ -72,14 +73,14 @@ export const App: React.FC = () => {
       if (state.lastSleep) setLastSleep(state.lastSleep);
       if (typeof state.focusMinutes === 'number') setFocusMinutes(state.focusMinutes);
     } catch {
-      localStorage.removeItem('turno-state-v1');
+      localStorage.removeItem(stateKey);
     }
     setHydrated(true);
   }, []);
 
   useEffect(() => {
     if (!hydrated) return;
-    localStorage.setItem('turno-state-v1', JSON.stringify({ timeOfDay, ap, tasks, topics, pots, dayLabel, sleepPlan, lastSleep, focusMinutes }));
+    localStorage.setItem(stateKey, JSON.stringify({ timeOfDay, ap, tasks, topics, pots, dayLabel, sleepPlan, lastSleep, focusMinutes }));
   }, [hydrated, timeOfDay, ap, tasks, topics, pots, dayLabel, sleepPlan, lastSleep, focusMinutes]);
 
   const announce = (message: string) => {
@@ -114,6 +115,11 @@ export const App: React.FC = () => {
   const handleAddTask = (task: Omit<Task, 'id' | 'status'>) => {
     setTasks(prev => [...prev, { ...task, id: 'custom-' + Date.now(), status: 'pending' }]);
     announce('Novo bloco adicionado ao seu turno.');
+  };
+
+  const handleEditTask = (id: string, changes: Partial<Omit<Task, 'id' | 'status'>>) => {
+    setTasks(previous => previous.map(task => task.id === id ? { ...task, ...changes } : task));
+    announce('Bloco atualizado.');
   };
 
   // Ações de Foco
@@ -211,6 +217,7 @@ export const App: React.FC = () => {
             dayLabel={dayLabel}
             onOpenRest={() => setIsRestOpen(true)}
             roomState={roomState}
+            tasks={tasks}
           />
         )}
 
@@ -221,6 +228,7 @@ export const App: React.FC = () => {
             onPostponeTask={handlePostponeTask}
             onRemoveTask={handleRemoveTask}
             onAddTask={handleAddTask}
+            onEditTask={handleEditTask}
           />
         )}
 

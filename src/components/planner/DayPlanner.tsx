@@ -7,6 +7,7 @@ interface DayPlannerProps {
   onPostponeTask: (id: string) => void;
   onRemoveTask: (id: string) => void;
   onAddTask: (task: Omit<Task, 'id' | 'status'>) => void;
+  onEditTask: (id: string, changes: Partial<Omit<Task, 'id' | 'status'>>) => void;
 }
 
 export const DayPlanner: React.FC<DayPlannerProps> = ({
@@ -15,12 +16,18 @@ export const DayPlanner: React.FC<DayPlannerProps> = ({
   onPostponeTask,
   onRemoveTask,
   onAddTask
+  , onEditTask
 }) => {
   const [title, setTitle] = useState('');
   const [timeLabel, setTimeLabel] = useState('18:00');
   const [period, setPeriod] = useState<DayBlockPeriod>('afternoon');
   const [isFixed, setIsFixed] = useState(false);
   const [dueDate, setDueDate] = useState('');
+  const [editingId, setEditingId] = useState<string>();
+  const [editTitle, setEditTitle] = useState('');
+  const [editTime, setEditTime] = useState('');
+  const [editDueDate, setEditDueDate] = useState('');
+  const [editFixed, setEditFixed] = useState(false);
   const blocks: { period: DayBlockPeriod; label: string; icon: string }[] = [
     { period: 'morning', label: 'Manhã (06h - 12h)', icon: '🌅' },
     { period: 'afternoon', label: 'Tarde (12h - 18h)', icon: '☀️' },
@@ -111,7 +118,12 @@ export const DayPlanner: React.FC<DayPlannerProps> = ({
                         opacity: task.status === 'completed' ? 0.6 : task.status === 'postponed' ? 0.75 : 1
                       }}
                     >
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', flex: 1 }}>
+                        {editingId === task.id ? <div style={{ display: 'grid', gap: '5px' }}>
+                          <input value={editTitle} onChange={event => setEditTitle(event.target.value)} aria-label="Título do bloco" />
+                          <div style={{ display: 'flex', gap: '5px' }}><input type="time" value={editTime} onChange={event => setEditTime(event.target.value)} aria-label="Horário do bloco" /><input type="date" value={editDueDate} onChange={event => setEditDueDate(event.target.value)} aria-label="Prazo do bloco" /></div>
+                          <label className="add-block__check"><input type="checkbox" checked={editFixed} onChange={event => setEditFixed(event.target.checked)} /> Compromisso fixo</label>
+                        </div> : <>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
                             {task.timeLabel}
@@ -126,6 +138,7 @@ export const DayPlanner: React.FC<DayPlannerProps> = ({
                           </span>
                         </div>
                         {task.dueDate && <span style={{ fontSize: '0.65rem', color: 'var(--slate-focus)' }}>Prazo: {new Date(`${task.dueDate}T12:00:00`).toLocaleDateString('pt-BR')}</span>}
+                        </>}
                         {task.status === 'postponed' && (
                           <span style={{ fontSize: '0.65rem', color: 'var(--amber-warm)' }}>
                             → Reorganizado para amanhã
@@ -135,6 +148,8 @@ export const DayPlanner: React.FC<DayPlannerProps> = ({
 
                       {/* Ações inline imediatas em 1 toque */}
                       <div style={{ display: 'flex', gap: '4px' }}>
+                        {editingId === task.id ? <><button className="btn-retro" onClick={() => { onEditTask(task.id, { title: editTitle.trim() || task.title, timeLabel: editTime, dueDate: editDueDate || undefined, isFixed: editFixed }); setEditingId(undefined); }}>Salvar</button><button className="btn-retro" onClick={() => setEditingId(undefined)}>Cancelar</button></> : <>
+                        <button className="btn-retro" onClick={() => { setEditingId(task.id); setEditTitle(task.title); setEditTime(task.timeLabel); setEditDueDate(task.dueDate || ''); setEditFixed(Boolean(task.isFixed)); }} aria-label={`Editar ${task.title}`}>✎</button>
                         {task.status !== 'completed' && (
                           <button
                             onClick={() => onCompleteTask(task.id)}
@@ -185,7 +200,7 @@ export const DayPlanner: React.FC<DayPlannerProps> = ({
                           >
                             ×
                           </button>
-                        )}
+                        )}</>}
                       </div>
                     </div>
                   ))

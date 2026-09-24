@@ -1,5 +1,5 @@
 import React from 'react';
-import { TimeOfDay } from '../../types';
+import { TimeOfDay, Task } from '../../types';
 import { RoomVisual } from './RoomVisual';
 
 interface RoomProps {
@@ -10,9 +10,12 @@ interface RoomProps {
   dayLabel: string;
   onOpenRest: () => void;
   roomState: 'ritmo' | 'pausa' | 'casulo';
+  tasks: Task[];
 }
 
-export const Room: React.FC<RoomProps> = ({ timeOfDay, onNavigate, onStartFocus, dayProgress, dayLabel, onOpenRest, roomState }) => {
+export const Room: React.FC<RoomProps> = ({ timeOfDay, onNavigate, onStartFocus, dayProgress, dayLabel, onOpenRest, roomState, tasks }) => {
+  const nextTask = tasks.find(task => task.status === 'pending');
+  const fixedTask = tasks.find(task => task.status === 'pending' && task.isFixed);
   return (
     <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
       {/* Cenário Central do Quarto */}
@@ -30,17 +33,15 @@ export const Room: React.FC<RoomProps> = ({ timeOfDay, onNavigate, onStartFocus,
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem' }}>
-            <span>🔒</span>
-            <span style={{ fontWeight: 600 }}>14:00 - Estágio</span>
-            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>(Compromisso Fixo)</span>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem' }}>
-            <span>⚔️</span>
-            <span style={{ fontWeight: 600 }}>17:30 - Árvores Binárias</span>
-            <span style={{ fontSize: '0.7rem', color: 'var(--amber-warm)' }}>(Boss em 3 dias)</span>
-          </div>
+          {fixedTask && <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem' }}>
+            <span>🔒</span><span style={{ fontWeight: 600 }}>{fixedTask.timeLabel} - {fixedTask.title}</span>
+            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>(Compromisso fixo)</span>
+          </div>}
+          {nextTask && <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem' }}>
+            <span>🧭</span><span style={{ fontWeight: 600 }}>{nextTask.timeLabel} - {nextTask.title}</span>
+            {nextTask.dueDate && <span style={{ fontSize: '0.7rem', color: 'var(--amber-warm)' }}>Prazo {new Date(`${nextTask.dueDate}T12:00:00`).toLocaleDateString('pt-BR')}</span>}
+          </div>}
+          {!nextTask && <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Nenhum bloco pendente neste turno.</span>}
         </div>
         <div className="room-progress" aria-label={`Progresso dos blocos: ${dayProgress}%`}>
           <div className="room-progress__label"><span>Ritmo do dia</span><strong>{dayProgress}%</strong></div>

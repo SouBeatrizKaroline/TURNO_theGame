@@ -20,7 +20,7 @@ export const BossArena: React.FC<BossArenaProps> = ({ topics, onStartFocus, onAd
           O Enigma de Estrutura de Dados
         </h2>
         <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-          ⏳ Prova presencial em 3 dias
+          ⏳ Registre um prazo real nos seus blocos quando fizer sentido
         </p>
       </div>
 
