@@ -20,6 +20,7 @@ export const DayPlanner: React.FC<DayPlannerProps> = ({
   const [timeLabel, setTimeLabel] = useState('18:00');
   const [period, setPeriod] = useState<DayBlockPeriod>('afternoon');
   const [isFixed, setIsFixed] = useState(false);
+  const [dueDate, setDueDate] = useState('');
   const blocks: { period: DayBlockPeriod; label: string; icon: string }[] = [
     { period: 'morning', label: 'Manhã (06h - 12h)', icon: '🌅' },
     { period: 'afternoon', label: 'Tarde (12h - 18h)', icon: '☀️' },
@@ -41,14 +42,18 @@ export const DayPlanner: React.FC<DayPlannerProps> = ({
       <form className="card-pixel add-block" onSubmit={(event) => {
         event.preventDefault();
         if (!title.trim()) return;
-        onAddTask({ title: title.trim(), timeLabel, period, isFixed });
+        onAddTask({ title: title.trim(), timeLabel, period, isFixed, dueDate: dueDate || undefined });
         setTitle('');
         setIsFixed(false);
+        setDueDate('');
       }}>
         <div className="add-block__heading">
           <div><strong>Montar meu dia</strong><span>Crie um bloco que faça sentido para a sua realidade.</span></div>
           <span aria-hidden="true">＋</span>
         </div>
+        <label>Prazo real (opcional)
+          <input type="date" value={dueDate} onChange={(event) => setDueDate(event.target.value)} />
+        </label>
         <label>Atividade
           <input value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Ex.: estudar, trabalhar, descansar..." />
         </label>
@@ -120,6 +125,7 @@ export const DayPlanner: React.FC<DayPlannerProps> = ({
                             {task.title}
                           </span>
                         </div>
+                        {task.dueDate && <span style={{ fontSize: '0.65rem', color: 'var(--slate-focus)' }}>Prazo: {new Date(`${task.dueDate}T12:00:00`).toLocaleDateString('pt-BR')}</span>}
                         {task.status === 'postponed' && (
                           <span style={{ fontSize: '0.65rem', color: 'var(--amber-warm)' }}>
                             → Reorganizado para amanhã

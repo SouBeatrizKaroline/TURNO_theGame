@@ -3,12 +3,14 @@ import { TopicFamiliarity } from '../../types';
 
 interface FocusSessionProps {
   topicTitle: string;
+  linkedTaskTitle?: string;
   onFinish: (result: TopicFamiliarity, minutes: number) => void;
   onCancel: () => void;
 }
 
 export const FocusSession: React.FC<FocusSessionProps> = ({
   topicTitle,
+  linkedTaskTitle,
   onFinish,
   onCancel
 }) => {
@@ -107,6 +109,7 @@ export const FocusSession: React.FC<FocusSessionProps> = ({
         <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
           Escolha um tempo que caiba no seu turno. Você pode pausar sem perder o registro.
         </p>
+        {linkedTaskTitle && <p style={{ fontSize: '0.72rem', color: 'var(--slate-focus)' }}>Bloco vinculado: {linkedTaskTitle}</p>}
       </div>
 
       {!hasStarted && <div className="focus-duration-picker" aria-label="Duração do foco">

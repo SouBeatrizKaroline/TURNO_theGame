@@ -9,13 +9,14 @@ interface RoomProps {
   dayProgress: number;
   dayLabel: string;
   onOpenRest: () => void;
+  roomState: 'ritmo' | 'pausa' | 'casulo';
 }
 
-export const Room: React.FC<RoomProps> = ({ timeOfDay, onNavigate, onStartFocus, dayProgress, dayLabel, onOpenRest }) => {
+export const Room: React.FC<RoomProps> = ({ timeOfDay, onNavigate, onStartFocus, dayProgress, dayLabel, onOpenRest, roomState }) => {
   return (
     <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
       {/* Cenário Central do Quarto */}
-      <RoomVisual timeOfDay={timeOfDay} onNavigate={onNavigate} dayProgress={dayProgress} onOpenRest={onOpenRest} />
+      <RoomVisual timeOfDay={timeOfDay} onNavigate={onNavigate} onOpenRest={onOpenRest} roomState={roomState} />
 
       {/* Cartão de Contexto Operacional da Tarde */}
       <div className="card-pixel" style={{ padding: '14px' }}>
@@ -46,6 +47,9 @@ export const Room: React.FC<RoomProps> = ({ timeOfDay, onNavigate, onStartFocus,
           <div className="room-progress__track"><span style={{ width: `${dayProgress}%` }} /></div>
           <small>{dayProgress >= 70 ? 'O quarto sente que você encontrou seu ritmo.' : 'Cada bloco é uma escolha, não uma cobrança.'}</small>
         </div>
+        <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+          {roomState === 'casulo' ? 'Modo Casulo: o quarto acolhe um ritmo de baixa energia.' : roomState === 'pausa' ? 'O quarto está em pausa. Reorganizar também faz parte do turno.' : 'O quarto acompanha seu ritmo sem classificar o dia como sucesso ou falha.'}
+        </p>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
           <button

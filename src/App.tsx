@@ -19,6 +19,7 @@ export const App: React.FC = () => {
   const [isRestOpen, setIsRestOpen] = useState(false);
   const [isWelcomeOpen, setIsWelcomeOpen] = useState(() => !localStorage.getItem('turno-onboarding-v1'));
   const [focusTopic, setFocusTopic] = useState<string>('Árvores Binárias');
+  const [focusTaskTitle, setFocusTaskTitle] = useState<string>();
   const [dayLabel, setDayLabel] = useState('Meu dia');
   const [sleepPlan, setSleepPlan] = useState({ bedtime: '23:00', wakeTime: '07:00' });
   const [lastSleep, setLastSleep] = useState<{ bedtime: string; wakeTime: string; quality: string; duration: number }>();
@@ -96,9 +97,11 @@ export const App: React.FC = () => {
 
   const handlePostponeTask = (id: string) => {
     const previous = tasks;
+    const task = tasks.find(item => item.id === id);
+    const availableMargin = tasks.filter(item => item.status === 'pending' && !item.isFixed && item.id !== id).length;
     setTasks(prev => prev.map(t => t.id === id ? { ...t, status: 'postponed' } : t));
     setUndo(() => () => setTasks(previous));
-    announce('Bloco reorganizado. Se foi sem querer, você pode desfazer.');
+    announce(`${task?.title || 'Bloco'} reorganizado. Custo de oportunidade: ${availableMargin ? `${availableMargin} margem(ns) livre(s) disponível(is)` : 'a próxima escolha ocupará outro espaço'}.`);
   };
 
   const handleRemoveTask = (id: string) => {
@@ -114,8 +117,9 @@ export const App: React.FC = () => {
   };
 
   // Ações de Foco
-  const handleStartFocus = (topicTitle: string = 'Árvores Binárias') => {
+  const handleStartFocus = (topicTitle: string = 'Árvores Binárias', taskTitle?: string) => {
     setFocusTopic(topicTitle);
+    setFocusTaskTitle(taskTitle || tasks.find(task => task.title.includes(topicTitle) && task.status === 'pending')?.title);
     setActiveTab('focus');
   };
 
@@ -149,7 +153,7 @@ export const App: React.FC = () => {
     setFocusMinutes(prev => prev + minutes);
     setTopics(prev => prev.map(t => t.title === focusTopic ? { ...t, familiarity: result } : t));
     // Conclui também a tarefa de estudo caso exista na lista
-    setTasks(prev => prev.map(t => t.title.includes(focusTopic) ? { ...t, status: 'completed' } : t));
+    setTasks(prev => prev.map(t => (t.title.includes(focusTopic) || t.title === focusTaskTitle) ? { ...t, status: 'completed' } : t));
     setActiveTab('boss');
     announce(`Check-in salvo. ${minutes} min de foco registrados.`);
   };
@@ -182,6 +186,7 @@ export const App: React.FC = () => {
   const flexibleBudgetRemaining = (pots.find(p => p.id === 'flexible')?.limit || 0) - (pots.find(p => p.id === 'flexible')?.spent || 0);
   const completedTasks = tasks.filter(task => task.status === 'completed').length;
   const dayProgress = tasks.length ? Math.round((completedTasks / tasks.length) * 100) : 0;
+  const roomState = ap < 35 ? 'casulo' : tasks.some(task => task.status === 'postponed') ? 'pausa' : 'ritmo';
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
@@ -205,6 +210,7 @@ export const App: React.FC = () => {
             dayProgress={dayProgress}
             dayLabel={dayLabel}
             onOpenRest={() => setIsRestOpen(true)}
+            roomState={roomState}
           />
         )}
 
@@ -229,6 +235,7 @@ export const App: React.FC = () => {
         {activeTab === 'focus' && (
           <FocusSession
             topicTitle={focusTopic}
+            linkedTaskTitle={focusTaskTitle}
             onFinish={handleFinishFocus}
             onCancel={() => setActiveTab('boss')}
           />

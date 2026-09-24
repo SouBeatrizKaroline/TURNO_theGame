@@ -4,11 +4,11 @@ import { TimeOfDay } from '../../types';
 interface RoomVisualProps {
   timeOfDay: TimeOfDay;
   onNavigate: (tab: 'planner' | 'boss' | 'finance') => void;
-  dayProgress: number;
   onOpenRest: () => void;
+  roomState: 'ritmo' | 'pausa' | 'casulo';
 }
 
-export const RoomVisual: React.FC<RoomVisualProps> = ({ timeOfDay, onNavigate, dayProgress, onOpenRest }) => {
+export const RoomVisual: React.FC<RoomVisualProps> = ({ timeOfDay, onNavigate, onOpenRest, roomState }) => {
   const activate = (action: () => void) => (event: React.KeyboardEvent<SVGGElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
@@ -83,8 +83,8 @@ export const RoomVisual: React.FC<RoomVisualProps> = ({ timeOfDay, onNavigate, d
         <rect x="31" y="19" width="7" height="16" fill="#DC6A6A" />
         <rect x="39" y="24" width="8" height="11" fill="#F3C969" />
         {/* Vaso de Suculenta */}
-        <rect x="68" y="25" width="12" height="10" fill="#8C5338" />
-          <rect x="70" y="18" width="8" height={dayProgress >= 60 ? "7" : "4"} fill="#7FB685" />
+          <rect x="68" y="25" width="12" height="10" fill="#8C5338" />
+          <rect x="70" y="18" width="8" height={roomState === 'ritmo' ? "7" : "4"} fill="#7FB685" />
 
         {/* CALENDÁRIO NA PAREDE (Interativo -> Blocos) */}
         <g 
@@ -127,7 +127,7 @@ export const RoomVisual: React.FC<RoomVisualProps> = ({ timeOfDay, onNavigate, d
         {/* TAPETE CENTRAL & GATINHO */}
         <ellipse cx="150" cy="212" rx="42" ry="14" fill="#483D59" />
         {/* Gato dormindo encolhido */}
-        <ellipse cx="145" cy="210" rx="11" ry="8" fill="#EBA059" />
+        <ellipse cx="145" cy="210" rx="11" ry="8" fill={roomState === 'casulo' ? '#C97B85' : '#EBA059'} />
         <polygon points="138,204 142,201 143,206" fill="#C97B35" />
         <polygon points="149,204 153,201 154,206" fill="#C97B35" />
 

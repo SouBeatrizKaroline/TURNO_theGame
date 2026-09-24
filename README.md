@@ -2,126 +2,87 @@
 
 > **Seu dia em blocos. Sua vida no seu ritmo.**
 
-TURNO é um protótipo funcional de jogo de rotina estudantil. Ele ajuda a visualizar o que cabe no dia, preparar uma prova, preservar energia, acompanhar gastos e reorganizar planos quando a realidade muda, sem streaks, culpa ou linguagem de fracasso.
-
-## Sumário
-
-- [Propósito](#propósito)
-- [Problema](#problema)
-- [Origem da solução](#origem-da-solução)
-- [O que já funciona](#o-que-já-funciona)
-- [Fluxo da experiência](#fluxo-da-experiência)
-- [Demonstração](#demonstração)
-- [Tecnologias](#tecnologias)
-- [Arquitetura](#arquitetura)
-- [Como executar](#como-executar)
-- [Decisões de design](#decisões-de-design)
-- [Acessibilidade](#acessibilidade)
-- [Limitações atuais](#limitações-atuais)
-- [Próximos passos](#próximos-passos)
-- [Licença](#licença)
-
-## Propósito
-
-Transformar a gestão do tempo, a organização, a vida financeira e a higiene do sono em uma experiência acolhedora de percepção e escolha. Antes do dia, o TURNO funciona como uma **bússola**, tornando limites e prioridades visíveis. Depois das ações, funciona como um **espelho**, permitindo rever familiaridade, energia, descanso e margem financeira sem converter a vida em uma nota de produtividade.
-
-## Problema
-
-Estudantes conciliam aulas, estágio, provas, dinheiro, sono, lazer e imprevistos. Ferramentas tradicionais frequentemente separam esses temas e tratam o plano como uma lista ideal. Quando algo muda, o atraso pode parecer falha individual. O TURNO explora outra hipótese: oferecer blocos finitos, consequências legíveis e um caminho explícito para reorganizar sem culpa.
-
-## Origem da solução
-
-A solução nasceu do teste de três caminhos e da comparação pelo método ROTA:
-
-- **Sandbox Preditivo:** trouxe a visão antecipada da rotina e a percepção de gargalos antes que a semana fique inviável.
-- **Deckbuilder Tático:** inspirou recursos limitados, escolhas e custos de oportunidade: ocupar um bloco significa deixar outra ação para depois.
-- **Bioma Espelho:** orientou o ambiente acolhedor, o feedback visual e a linguagem não punitiva com poucas interações.
-
-A combinação resultou em um ciclo mínimo: **perceber → escolher → agir → observar → reorganizar**.
-
-## O que já funciona
-
-- **Quarto como hub:** cenário 2D em Cozy Pixel Art, com atalhos interativos e atmosferas de manhã, tarde e noite.
-- **Blocos do Dia:** compromissos organizados por turno, com ações de concluir, adiar e remover; adiamento é tratado como reorganização.
-- **Montar meu dia:** criação de atividades próprias com título, horário, turno e marcação de compromisso fixo.
-- **Desafio acadêmico:** o Enigma de Estrutura de Dados reúne tópicos com familiaridade Nebuloso, Razoável ou Firme.
-- **Sessão de foco:** cronômetro de 25 minutos com pausa, conclusão antecipada e check-in qualitativo ao final.
-- **Três potes financeiros:** Essenciais, Flexível e Reserva, com registro rápido de gastos.
-- **Começo de semana:** introdução guiada para definir o nome do turno, o orçamento inicial de cada pote e o ritmo de sono, todos começando sem gastos registrados.
-- **Contexto estudantil opcional:** no começo, a pessoa pode informar curso, disciplina/aula e horário; estágio ou trabalho só aparece se ela marcar que possui um.
-- **Desfazer:** concluir, adiar ou remover um bloco mostra uma ação de desfazer para reduzir o custo de toques acidentais.
-- **Nova semana:** a Caixa permite reabrir a configuração e ajustar os limites sem apagar o conceito de registro da semana anterior.
-- **Tudo Mudou:** fluxo de resgate que reorganiza tarefas flexíveis e protege energia, sem apagar compromissos fixos.
-- **Estado compartilhado:** uma sessão de foco atualiza o tópico e a tarefa correspondente; um gasto atualiza o pote e o HUD.
-
-## Fluxo da experiência
-
-```text
-Quarto
-├── Calendário → Blocos do Dia → concluir ou adiar
-├── Mesa ──────→ Desafio → escolher tópico → Foco → check-in
-├── Cofrinho ──→ Três potes → registrar gasto
-├── Tudo Mudou → reorganizar tarefas flexíveis
-└── retorno ao Quarto
-```
+**Status: EM CONSTRUÇÃO.** TURNO é um protótipo de experiência estudantil em Cozy Pixel Art, com o Quarto como hub. A proposta explora organização do tempo, estudos e desafios, finanças simplificadas e sono/recuperação sem transformar a vida em placar, streak ou cobrança.
 
 ## Demonstração
 
-Para percorrer a vertical slice completa:
+[Abrir a demo publicada](https://turnothegame.vercel.app/)
 
-1. altere o turno no topo e observe a iluminação do Quarto;
-2. abra **Blocos** e conclua ou adie uma atividade;
-3. abra **Desafios**, selecione **Árvores Binárias** e inicie o foco;
-4. conclua a sessão e informe como o conteúdo ficou;
-5. abra **Caixa**, registre R$ 10 no pote Flexível;
-6. use **Tudo Mudou** para reorganizar o restante do dia;
-7. volte ao Quarto.
+## Origem: Desafio #01 da Semana 5
 
-> A pasta `docs/screenshots/` está preparada para receber capturas da versão publicada sem misturar arquivos de interface com o código-fonte.
+Na **ROTA 4 | Quero resolver ou construir algo**, a pergunta era como ajudar estudantes a organizar tempo, estudos, finanças e descanso sem criar apenas mais um planner ou uma ferramenta de produtividade punitiva.
 
-## Tecnologias
+Foram explorados três caminhos:
 
-- React
-- TypeScript
-- Vite
-- SVG e CSS para a arte e a interface
-- ESLint
-- GitHub Actions
+- **Sandbox Preditivo | O Laboratório do Tempo:** antecipação, visão semanal, gargalos, imprevistos e margem.
+- **Deckbuilder Tático | Economia de Ações por Cartas:** blocos limitados, escolhas, consequências e custo de oportunidade, sem microgerenciamento.
+- **Bioma Espelho | Ecossistema Vivo:** feedback visual em pixel art, recuperação, baixo atrito e linguagem não punitiva.
 
-Não há backend, autenticação, rastreamento ou dependência de dados pessoais nesta versão.
+O ROTA mostrou que nenhum caminho precisava ser escolhido sozinho. A combinação deu origem ao TURNO. O #01 foi uma etapa de exploração: testar caminhos diferentes ajudou a descobrir a direção e suas limitações.
+
+## Desafio #02 da Semana 5: PARTS
+
+No #02, a direção já descoberta foi aprofundada com o papel de **Game Design Sistêmico + UX**. O PARTS orientou uma rede de causa e efeito entre quatro pilares: **tempo**, **estudos e desafios**, **finanças simplificadas** e **sono/recuperação**.
+
+A exploração trouxe hipóteses sobre o Quarto e o avatar como espelhos reativos, mecânicas de baixo atrito e escolhas que podem ser reorganizadas. A diferença entre os desafios é importante: o #01 abriu possibilidades; o #02 deu direção para desenvolver uma delas. PARTS ajudou a estruturar o próximo protótipo, mas não validou as hipóteses.
+
+## Filosofia de design
+
+- O Quarto é um hub acolhedor, não um painel de produtividade.
+- Um bloco reorganizado não é uma falha. Compromissos fixos e prazos reais continuam visíveis.
+- O custo de oportunidade é apresentado como escolha, não como punição.
+- Desafios usam familiaridade qualitativa: **Travado, Fluindo e Firme**. Isso não é domínio preciso, nota ou previsão de aprovação.
+- Sono e recuperação são registros voluntários e qualitativos. O jogo não calcula capacidade cognitiva a partir do sono.
+- Finanças são simples, neutras e manuais. O jogo não associa automaticamente cansaço a gastos e não trata dinheiro como solução universal para comprar tempo.
+- Relações entre descanso, foco, aprendizagem, dinheiro e comportamento são hipóteses de design ou escolhas explícitas, nunca fatos determinísticos.
+
+## O que realmente funciona nesta versão
+
+- Quarto em SVG com estética Cozy Pixel Art e atalhos para rotina, desafios, finanças e recuperação.
+- Estados visuais acolhedores do Quarto: ritmo, pausa e Modo Casulo, sem sujeira, deterioração ou punição.
+- Blocos do dia por turno, com criação livre, conclusão, reorganização, remoção e desfazer.
+- Prazo real opcional em cada bloco, exibido como data informada pela pessoa.
+- Compromissos fixos protegidos durante Tudo Mudou.
+- Custo de oportunidade comunicado ao reorganizar um bloco.
+- Desafios com tópicos e autoavaliação Travado, Fluindo ou Firme.
+- Sessão de foco com duração escolhida e vínculo explícito ao tópico ou bloco de estudo quando ele existe.
+- Registro qualitativo e voluntário de sono/recuperação.
+- Três potes financeiros com registro manual de gastos.
+- Estado salvo localmente no navegador, sem conta, backend ou rastreamento.
+
+## O que ainda é hipótese ou limitação
+
+- Ainda não há visão semanal completa com vários dias, notificações ou sincronização com calendário.
+- O prazo informado é exibido, mas não altera nem estende prazos acadêmicos reais.
+- Não há evidência de que feedback visual, abstração financeira ou margem tática melhorem retenção, foco, aprendizagem ou bem-estar.
+- As relações entre os quatro pilares ainda precisam de testes com estudantes reais, incluindo pessoas neurodivergentes e usuárias de tecnologias assistivas.
+- O estado é local ao navegador e não possui sincronização, autenticação ou exportação.
+- A arquitetura ainda é uma vertical slice. Eventos ou dilemas opcionais e uma rede mais ampla de consequências são próximos experimentos, não funcionalidades confirmadas.
+
+## Uso do Gemini
+
+O Gemini participou da ideação e da comparação dos três caminhos do Desafio #01. Também ajudou na estruturação do TURNO, na exploração de mecânicas, game design, level design e prototipação inicial. A implementação, as decisões de escopo, os ajustes de segurança conceitual e a evolução do código foram conduzidos de forma iterativa, sem atribuir à ferramenta a autoria isolada do projeto.
 
 ## Arquitetura
 
 ```text
-turno/
-├── .github/workflows/quality.yml
-├── docs/screenshots/
-├── src/
-│   ├── components/
-│   │   ├── boss/       # desafio acadêmico
-│   │   ├── finance/    # potes e gastos
-│   │   ├── focus/      # cronômetro e check-in
-│   │   ├── planner/    # blocos e tarefas
-│   │   ├── room/       # hub visual e hotspots
-│   │   ├── BottomNavigation.tsx
-│   │   ├── RescueModal.tsx
-│   │   └── ResourceHUD.tsx
-│   ├── App.tsx         # estado e integração da vertical slice
-│   ├── index.css       # tokens visuais e estilos globais
-│   ├── main.tsx
-│   └── types.ts
-├── index.html
-├── package.json
-├── vite.config.ts
-├── LICENSE
-└── README.md
+src/
+├── App.tsx                       # estado local e integração da experiência
+├── types.ts                      # tarefas, tópicos, finanças e estados
+├── components/
+│   ├── room/                     # Quarto hub e arte SVG reativa
+│   ├── planner/                  # blocos, prazos e reorganização
+│   ├── boss/                     # desafios e familiaridade qualitativa
+│   ├── focus/                    # sessão ligada a estudo
+│   ├── finance/                  # potes e gastos manuais
+│   ├── RestModal.tsx             # recuperação e registro de sono
+│   └── RescueModal.tsx           # Tudo Mudou
+└── index.css                     # tokens, responsividade e acessibilidade
 ```
 
-A aplicação usa estado local no componente principal. Os módulos recebem dados e ações por propriedades, deixando explícita a relação entre planejamento, estudo e finanças.
+## Stack e execução local
 
-## Como executar
-
-Pré-requisito: Node.js 20 ou superior.
+React, TypeScript, Vite, SVG/CSS, ESLint e GitHub Actions. Não há backend, autenticação, banco, integração bancária ou rastreamento.
 
 ```bash
 git clone https://github.com/SouBeatrizKaroline/TURNO_theGame.git
@@ -130,7 +91,7 @@ npm install
 npm run dev
 ```
 
-Abra o endereço mostrado pelo Vite. Para validar a versão de produção:
+Validação de produção:
 
 ```bash
 npm run lint
@@ -138,46 +99,18 @@ npm run build
 npm run preview
 ```
 
-## Decisões de design
+## Acessibilidade e mobile first
 
-- **Blocos, não minutos:** reduz microgerenciamento e destaca capacidade limitada.
-- **Sem sequência punitiva:** não existem streaks, perda de pontos por adiamento ou mensagens de culpa.
-- **Familiaridade qualitativa:** o check-in descreve a relação com o conteúdo; não prevê nota ou aprovação.
-- **Compromissos fixos continuam visíveis:** o fluxo Tudo Mudou reorganiza prioridades sem fingir que prazos reais desapareceram.
-- **Pixel art em código:** o quarto e o monumento são SVGs, leves e versionáveis, sem imagens externas obrigatórias.
-- **Mobile first:** a experiência foi desenhada para uma interação curta durante uma semana corrida.
+A interface usa HTML semântico, rótulos acessíveis, navegação por teclado, foco visível, controles grandes, informação textual além de cor, tipografia legível e `prefers-reduced-motion`. O layout parte de telas pequenas e se amplia para telas maiores.
 
-## Acessibilidade
+## Próximos testes
 
-- HTML em português e estrutura semântica com `header`, `main` e `nav`.
-- Botões e hotspots com rótulos acessíveis.
-- Informações não dependem apenas da cor: texto, ícones e estados acompanham o feedback visual.
-- Tipografia de leitura separada da fonte pixel usada em títulos.
-- Controles grandes e fluxo utilizável por teclado.
-- Mensagens diretas, acolhedoras e sem penalização por mudança de plano.
-- Respeito à preferência de movimento reduzido nos estilos globais.
-
-## Limitações atuais
-
-- É uma vertical slice com cenário e dados demonstrativos, não um produto concluído.
-- O estado ainda não é persistido entre recarregamentos.
-- Não há criação livre de tarefas, datas reais, notificações ou sincronização com calendário.
-- Finanças são um registro manual simplificado, sem integração bancária.
-- O Quarto muda conforme o período, mas ainda reage pouco às decisões tomadas nos outros módulos.
-- A familiaridade agregada do desafio é uma representação lúdica derivada de autoavaliação, não uma medida científica.
-- A proposta precisa ser validada com estudantes reais, incluindo pessoas neurodivergentes e usuárias de tecnologias assistivas.
-- A personalização atual começa pelos blocos; edição avançada de atividades, tópicos, nome do dia e limites dos potes ainda é uma próxima camada.
-- O onboarding não é uma orientação financeira: os valores são definidos pela própria pessoa e servem apenas para organização pessoal.
-
-## Próximos passos
-
-1. validar clareza, atrito e sensação de jogo com estudantes reais;
-2. conectar escolhas a consequências visuais mais perceptíveis no Quarto;
-3. tornar custo de oportunidade explícito ao ocupar ou mover um bloco;
-4. permitir configurar blocos, prazos e potes sem aumentar a burocracia;
-5. adicionar persistência local com controles claros para exportar ou apagar dados;
-6. testar contraste, zoom, leitor de tela, teclado e movimento reduzido;
-7. publicar uma demonstração web e registrar screenshots no repositório.
+1. observar se estudantes entendem blocos, prazos e custo de oportunidade sem sentir cobrança;
+2. testar o vínculo entre bloco de estudo e foco;
+3. avaliar se os estados do Quarto comunicam acolhimento sem infantilizar ou sugerir causalidade científica;
+4. testar leitura por teclado, zoom, contraste e leitor de tela;
+5. explorar uma visão semanal e eventos opcionais sem alterar compromissos reais;
+6. validar as hipóteses com participantes reais antes de afirmar qualquer efeito.
 
 ## Licença
 

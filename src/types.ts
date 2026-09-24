@@ -12,6 +12,8 @@ export interface Task {
   timeLabel: string;
   period: DayBlockPeriod;
   isFixed?: boolean;
+  dueDate?: string;
+  focusTopic?: string;
   status: TaskStatus;
 }
 

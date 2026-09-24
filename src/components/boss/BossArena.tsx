@@ -9,11 +9,6 @@ interface BossArenaProps {
 
 export const BossArena: React.FC<BossArenaProps> = ({ topics, onStartFocus, onAddTopic }) => {
   const [newTopic, setNewTopic] = useState('');
-  // Cálculo derivado da familiaridade
-  const pointsMap = { nebuloso: 1, razoavel: 2, firme: 3 };
-  const totalPoints = topics.reduce((acc, t) => acc + pointsMap[t.familiarity], 0);
-  const maxPossible = topics.length * 3;
-  const preparationPercent = Math.round((totalPoints / maxPossible) * 100);
 
   return (
     <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -50,45 +45,18 @@ export const BossArena: React.FC<BossArenaProps> = ({ topics, onStartFocus, onAd
           <polygon points="50,10 80,35 50,45" fill="#584D74" />
           <polygon points="50,45 70,80 30,80" fill="#342B47" />
 
-          {/* Fissuras luminosas que se expandem conforme a preparação */}
-          <line x1="50" y1="15" x2="50" y2="40" stroke={preparationPercent > 40 ? "var(--amber-warm)" : "#635880"} strokeWidth="2" />
-          <line x1="50" y1="40" x2="65" y2="60" stroke={preparationPercent > 60 ? "var(--gold-coin)" : "#635880"} strokeWidth="2" />
-          <line x1="50" y1="40" x2="35" y2="60" stroke={preparationPercent > 80 ? "var(--sage-calm)" : "#635880"} strokeWidth="2" />
+          {/* O monumento reage sem transformar familiaridade em medida precisa. */}
+          <line x1="50" y1="15" x2="50" y2="40" stroke="var(--amber-warm)" strokeWidth="2" />
+          <line x1="50" y1="40" x2="65" y2="60" stroke="var(--gold-coin)" strokeWidth="2" />
+          <line x1="50" y1="40" x2="35" y2="60" stroke="var(--sage-calm)" strokeWidth="2" />
 
           {/* Núcleo de conhecimento */}
-          <circle cx="50" cy="42" r="6" fill={preparationPercent > 50 ? "var(--amber-warm)" : "#221C30"} />
+          <circle cx="50" cy="42" r="6" fill="var(--amber-warm)" />
         </svg>
 
-        {/* Medidor de Preparação (Nunca "chance de nota") */}
-        <div style={{ width: '100%', marginTop: '12px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-main)' }}>
-              Familiaridade com o Conteúdo
-            </span>
-            <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--amber-warm)' }}>
-              {preparationPercent}%
-            </span>
-          </div>
-
-          <div style={{
-            width: '100%',
-            height: '10px',
-            background: 'var(--bg-deep)',
-            borderRadius: '5px',
-            overflow: 'hidden',
-            border: '1px solid var(--surface-light)'
-          }}>
-            <div style={{
-              width: `${preparationPercent}%`,
-              height: '100%',
-              background: 'linear-gradient(90deg, var(--amber-warm) 0%, var(--gold-coin) 100%)',
-              transition: 'width 0.4s ease'
-            }} />
-          </div>
-          <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginTop: '4px', textAlign: 'center' }}>
-            Reflete tópicos praticados, não uma predição estatística de aprovação.
-          </p>
-        </div>
+        <p style={{ width: '100%', marginTop: '12px', fontSize: '0.7rem', color: 'var(--text-muted)', textAlign: 'center' }}>
+          O cenário acompanha seu registro, sem transformar familiaridade em porcentagem ou previsão.
+        </p>
       </div>
 
       {/* Lista de Tópicos e Maestria */}
