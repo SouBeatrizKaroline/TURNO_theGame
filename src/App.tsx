@@ -31,13 +31,13 @@ export const App: React.FC = () => {
 
   // Estado das Tarefas dos 4 Blocos
   const [tasks, setTasks] = useState<Task[]>([
-    { id: '1', title: 'Aula de Estrutura de Dados', timeLabel: '08:00', period: 'morning', isFixed: true, status: 'completed' },
+    { id: '1', title: 'Aula de Estrutura de Dados', timeLabel: '08:00', period: 'morning', status: 'completed' },
     { id: '2', title: 'Revisar listas encadeadas', timeLabel: '10:30', period: 'morning', status: 'completed' },
-    { id: '3', title: 'Estágio Remoto', timeLabel: '14:00', period: 'afternoon', isFixed: true, status: 'pending' },
+    { id: '3', title: 'Estágio Remoto', timeLabel: '14:00', period: 'afternoon', status: 'pending' },
     { id: '4', title: 'Foco: Árvores Binárias', timeLabel: '17:30', period: 'afternoon', status: 'pending' },
     { id: '5', title: 'Jantar com calma', timeLabel: '19:30', period: 'night', status: 'pending' },
     { id: '6', title: 'Exercícios práticos', timeLabel: '20:30', period: 'night', status: 'pending' },
-    { id: '7', title: 'Recolhimento para o sono', timeLabel: '23:00', period: 'dawn', isFixed: true, status: 'pending' }
+    { id: '7', title: 'Recolhimento para o sono', timeLabel: '23:00', period: 'dawn', status: 'pending' }
   ]);
 
   // Estado dos Tópicos do Boss
@@ -139,9 +139,9 @@ export const App: React.FC = () => {
     setDayLabel(newDayLabel);
     setSleepPlan({ bedtime: setup.sleepTime, wakeTime: setup.wakeTime });
     const starterTasks: Task[] = [
-      ...(setup.className ? [{ id: 'context-class', title: setup.className, timeLabel: setup.classTime, period: setup.classTime < '12:00' ? 'morning' as const : 'afternoon' as const, isFixed: true, status: 'pending' as const }] : []),
-      ...(setup.hasWork ? [{ id: 'context-work', title: setup.workTitle || 'Trabalho', timeLabel: setup.workTime, period: setup.workTime < '12:00' ? 'morning' as const : 'afternoon' as const, isFixed: true, status: 'pending' as const }] : []),
-      { id: 'context-rest', title: 'Higiene do sono: desacelerar', timeLabel: setup.sleepTime, period: 'dawn', isFixed: true, status: 'pending' }
+      ...(setup.className ? [{ id: 'context-class', title: setup.className, timeLabel: setup.classTime, period: setup.classTime < '12:00' ? 'morning' as const : 'afternoon' as const, status: 'pending' as const }] : []),
+      ...(setup.hasWork ? [{ id: 'context-work', title: setup.workTitle || 'Trabalho', timeLabel: setup.workTime, period: setup.workTime < '12:00' ? 'morning' as const : 'afternoon' as const, status: 'pending' as const }] : []),
+      { id: 'context-rest', title: 'Higiene do sono: desacelerar', timeLabel: setup.sleepTime, period: 'dawn', status: 'pending' }
     ];
     setTasks(starterTasks);
     localStorage.setItem('turno-onboarding-v1', 'done');
